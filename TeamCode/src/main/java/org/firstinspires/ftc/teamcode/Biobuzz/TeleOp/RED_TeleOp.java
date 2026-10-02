@@ -6,7 +6,6 @@ import com.pedropathing.drivetrain.DrivePowers;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.math.Pose;
 import com.pedropathing.math.Velocity;
-import com.pedropathing.math.Vector2D;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -63,7 +62,7 @@ public class RED_TeleOp extends LinearOpMode {
 
         follower = Constants.create(hardwareMap);
 
-        follower.setPose(startingPose);
+        follower.setPose(startingPose);///de vazut
         follower.update();
 
         Gamepad currentG1 = new Gamepad();
@@ -90,7 +89,7 @@ public class RED_TeleOp extends LinearOpMode {
             currentG1.copy(gamepad1);
             previousG2.copy(currentG2);
             currentG2.copy(gamepad2);
-            handleMecanumDrive();
+
 
             for (LynxModule hub : allHubs) {
                 hub.clearBulkCache();
@@ -99,21 +98,24 @@ public class RED_TeleOp extends LinearOpMode {
             Pose currentPose = follower.pose();
             Velocity velocity = follower.velocity(); // Field-centric velocity
 
+            shooter.update_shooter(
+                    currentPose.x(),
+                    currentPose.y()
+            );
+
             turret.update_turret(
                     currentPose.x(),
                     currentPose.y(),
                     currentPose.heading()
             );
 
-            shooter.update_shooter(
-                    currentPose.x(),
-                    currentPose.y()
-            );
+
 
             handleControls(currentG1, previousG1, currentG2, previousG2);
             follower.update();
+            handleMecanumDrive();
             runStateMachine();
-            update_telemetry(shooter.distance_from_goal);
+            update_telemetry();
             loops.reset();
 
         }
@@ -200,17 +202,15 @@ public class RED_TeleOp extends LinearOpMode {
                 * 0.5;
 
         follower.drivetrain.drive(
-                new DrivePowers(
-                        -gamepad1.left_stick_y,
+                new DrivePowers(-gamepad1.left_stick_y,
                         -gamepad1.left_stick_x * 1.1,
                         turn
                 ),
-                true
+                false   // robot-centric
         );
-
     }
 
-    public void update_telemetry(double dist){
+    public void update_telemetry(){
         telemetry.addLine("-------- ROBOT STATE --------");
         telemetry.addData("  State", robotState.name());
 
@@ -258,4 +258,3 @@ public class RED_TeleOp extends LinearOpMode {
         telemetry.update();
     }
 }
-
