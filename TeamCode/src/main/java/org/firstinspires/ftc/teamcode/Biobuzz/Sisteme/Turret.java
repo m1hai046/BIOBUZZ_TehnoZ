@@ -21,7 +21,7 @@ public class Turret {
     public static double X_GOAL_RED_SUP = 58, Y_GOAL_RED_SUP = 82, X_GOAL_RED_INF = 58, Y_GOAL_RED_INF = 58;
     public static double X_GOAL_BLUE_SUP = 84, Y_GOAL_BLUE_SUP = 82, X_GOAL_BLUE_INF = 84, Y_GOAL_BLUE_INF = 58;
     public static double X_OFFSET_GAIN = 0.15, MAX_X_OFFSET = 4.0;//
-    public static double shooterWorldX, shooterWorldY, shooterOffset = 0.0;///de pus offset ul de la poz shooter ului
+    public static double shooterWorldX, shooterWorldY, shooterOffset = 0.0; ///de pus offset ul de la poz shooter ului
     public static double MIN_ANGLE = -80.0, MAX_ANGLE = 80.0, MIN_POS = 0.4, MAX_POS = 0.6;///de tunat
 
     public static double offset = 0.0;
@@ -88,7 +88,7 @@ public class Turret {
         }
     }
 
-    public void update_sotm(double x, double y, double heading, double vx, double vy){
+    public void update_sotm(double y, double heading){
 
         double predX = Globals.predX;
         double predY = Globals.predY;

@@ -34,7 +34,7 @@ public class RED_TeleOp extends LinearOpMode {
 
     private static final double trigger_threshold = 0.3;
     public double SHOOT_DURATION_MS = 800.0;
-    public static Pose startingPose = new Pose(15.5, 144.0 - 80.0, Math.toRadians(180));///de vazut
+    public static Pose startingPose = new Pose(55, 39, Math.toRadians(90));///de vazut
 
 
     public List<LynxModule> allHubs;

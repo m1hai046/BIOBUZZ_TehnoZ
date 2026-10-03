@@ -33,8 +33,8 @@ public class RED_TeleOp_sotm extends LinearOpMode {
     public Follower follower;
 
     private static final double trigger_threshold = 0.3;
-    public double SHOOT_DURATION_MS = 800.0;
-    public static Pose startingPose = new Pose(15.5, 144.0 - 80.0, Math.toRadians(180));///de vazut
+
+    public static Pose startingPose = new Pose(55, 39, Math.toRadians(90));///de vazut
 
 
     public List<LynxModule> allHubs;
@@ -106,11 +106,8 @@ public class RED_TeleOp_sotm extends LinearOpMode {
             );
 
             turret.update_sotm(
-                    currentPose.x(),
                     currentPose.y(),
-                    currentPose.heading(),
-                    velocity.toVector2D().x(),
-                    velocity.toVector2D().y()
+                    currentPose.heading()
             );
 
 
@@ -221,11 +218,6 @@ public class RED_TeleOp_sotm extends LinearOpMode {
         telemetry.addLine("-------- SHOOTER --------");
         telemetry.addData(" vel shooter ", shooter.motor_shooter.getVelocity());
         telemetry.addData(" RPM target", "%.1f", Shooter.TARGET_VELOCITY);
-
-
-        if (robotState == RobotState.SHOOT)
-            telemetry.addData("  Shoot timer", "%.0f / %.0f ms",
-                    shootTimer.milliseconds(), SHOOT_DURATION_MS);
 
         telemetry.addLine("-------- TURELA --------");
         telemetry.addData("  Unghi target", "%.1f°", Turret.target_position);

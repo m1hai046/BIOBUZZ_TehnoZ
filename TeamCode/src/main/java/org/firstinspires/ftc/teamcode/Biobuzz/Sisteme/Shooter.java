@@ -38,12 +38,12 @@ public class Shooter {
     ///poz goal aprox, de tunat
     public static double X_GOAL_RED_SUP = 58, Y_GOAL_RED_SUP = 82, X_GOAL_RED_INF = 58, Y_GOAL_RED_INF = 58;
     public static double X_GOAL_BLUE_SUP = 84, Y_GOAL_BLUE_SUP = 82, X_GOAL_BLUE_INF = 84, Y_GOAL_BLUE_INF = 58;
-    public static double X_OFFSET_GAIN = 0.15, MAX_X_OFFSET = 4.0;//
+    public static double X_OFFSET_GAIN = 0.15, MAX_X_OFFSET = 4.0;
     public static double minHoodAngle = 0.0, maxHoodAngle = 1.0, minShooterRpm = 1000.0, maxShooterRpm = 1900.0;
     public static double rpmOffset = 0.0;
 
     public State state;
-    public State previousState = State.RUNNING;   // adaugă asta ca și câmp
+    public State previousState = State.RUNNING;
 
     public ElapsedTime shootTimer;
     public double distance_from_goal;
