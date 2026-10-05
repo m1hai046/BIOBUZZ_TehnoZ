@@ -30,8 +30,8 @@ import dev.frozenmilk.dairy.cachinghardware.CachingServo;
 public class Shooter {
 
     public VoltageSensor shooter_voltage;
-    public static double TARGET_VELOCITY, HOOD_ANGLE, gateOpen = 0.2, gateClosed = 0.8;
-    public static double kP = 0.001 , kV = 0.0, kS = 0.0, nominalVoltage = 12.0 , error;
+    public static double TARGET_VELOCITY, HOOD_ANGLE, gateOpen = 0.15, gateClosed = 0.5;
+    public static double kP = 0.000375 , kV = 0.0004, kS = 0.05, nominalVoltage = 12.0 , error;
     public static double FAILSAFE_VELOCITY = 1000.0, FAILSAFE_ANGLE = 0.2, TARGET_STOPPED = 0.0;
     public boolean running = false, shooting = false;
 
@@ -54,8 +54,8 @@ public class Shooter {
     public Shooter(HardwareMap hardwareMap){
         motor_shooter = new CachingDcMotorEx(hardwareMap.get(DcMotorEx.class, "MSHT"));
         motor_shooter_2 = new CachingDcMotorEx(hardwareMap.get(DcMotorEx.class, "MSHT2"));
-        gate = new CachingServo(hardwareMap.get(Servo.class, "portita"));
-        hood = new CachingServo(hardwareMap.get(Servo.class, "hood"));
+        gate = new CachingServo(hardwareMap.get(Servo.class, "Gate"));
+        hood = new CachingServo(hardwareMap.get(Servo.class, "Reglaj"));
 
         motor_shooter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         motor_shooter_2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
@@ -158,7 +158,7 @@ public class Shooter {
             case SHOOTING:
                 shooting = true;
                 running = true;
-                if (Math.abs(error) <= 40) {
+                if (Math.abs(error) <= 100) {
                     gateOpen();
                     if (shootTimer.milliseconds() > 800) {///trb pus timer in teleop cand apesi pe buton sa isi dea reset
                         state = State.RUNNING;
@@ -301,7 +301,7 @@ public class Shooter {
             case SHOOTING:
                 shooting = true;
                 running = true;
-                if (Math.abs(error) <= 40) {
+                if (Math.abs(error) <= 100) {
                     gateOpen();
                     if (shootTimer.milliseconds() > 800) {///trb pus timer in teleop cand apesi pe buton sa isi dea reset
                         state = State.RUNNING;

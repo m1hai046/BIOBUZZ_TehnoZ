@@ -21,8 +21,9 @@ public class Turret {
     public static double X_GOAL_RED_SUP = 58, Y_GOAL_RED_SUP = 82, X_GOAL_RED_INF = 58, Y_GOAL_RED_INF = 58;
     public static double X_GOAL_BLUE_SUP = 84, Y_GOAL_BLUE_SUP = 82, X_GOAL_BLUE_INF = 84, Y_GOAL_BLUE_INF = 58;
     public static double X_OFFSET_GAIN = 0.15, MAX_X_OFFSET = 4.0;//
-    public static double shooterWorldX, shooterWorldY, shooterOffset = 0.0; ///de pus offset ul de la poz shooter ului
-    public static double MIN_ANGLE = -80.0, MAX_ANGLE = 80.0, MIN_POS = 0.4, MAX_POS = 0.6;///de tunat
+    public static double shooterWorldX, shooterWorldY, shooterOffset = -1.811; ///de pus offset ul de la poz shooter ului
+    public static double MIN_ANGLE = -180.0, MAX_ANGLE = 180.0, MIN_POS = 0.055, MAX_POS = 0.96;///de tunat
+    public static double goalX, goalY;
 
     public static double offset = 0.0;
 
@@ -43,7 +44,6 @@ public class Turret {
         shooterWorldY = y + (shooterOffset * Math.sin(heading));
 
 
-        double goalX, goalY;
         if(Globals.alliance == Globals.Alliance.RED){
             if (y >70.7) {///sup
                 goalX = X_GOAL_RED_SUP;
@@ -73,10 +73,10 @@ public class Turret {
         target_angle = AngleUnit.normalizeRadians(target_angle);
         heading = AngleUnit.normalizeRadians(heading);
 
-        relative_angle = Math.toDegrees(target_angle - heading) + offset;
-//        relative_angle = AngleUnit.normalizeDegrees(relative_angle) + offset;
-        relative_angle = AngleUnit.normalizeDegrees(relative_angle +180); //pt turela pe invers
-
+        relative_angle = Math.toDegrees(target_angle - heading);
+        relative_angle = AngleUnit.normalizeDegrees(relative_angle) + offset;
+//        relative_angle = AngleUnit.normalizeDegrees(relative_angle + 180);   //pt turela pe invers
+        ///am comentat o ca nu mai avem turela la spate
         relative_angle = Math.max(MIN_ANGLE, Math.min(MAX_ANGLE, relative_angle));
         target_position = Range.scale(relative_angle, MIN_ANGLE, MAX_ANGLE, MIN_POS, MAX_POS);
 
@@ -96,7 +96,7 @@ public class Turret {
         shooterWorldX = predX + (shooterOffset * Math.cos(heading));
         shooterWorldY = predY + (shooterOffset * Math.sin(heading));
 
-        double goalX, goalY;
+
         if(Globals.alliance == Globals.Alliance.RED){
             if (y >70.7) {///sup
                 goalX = X_GOAL_RED_SUP;
@@ -128,7 +128,8 @@ public class Turret {
 
         // Normalize and Scale
         relative_angle = Math.toDegrees(AngleUnit.normalizeRadians(target_angle - heading)) + offset;
-        relative_angle = AngleUnit.normalizeDegrees(relative_angle + 180);   //pt turela pe invers
+//        relative_angle = AngleUnit.normalizeDegrees(relative_angle + 180);   //pt turela pe invers
+        ///am comentat o ca nu mai avem turela la spate
         // Ensure relative_angle is within your physical hardware limits
         relative_angle = Math.max(MIN_ANGLE, Math.min(MAX_ANGLE, relative_angle));
 
