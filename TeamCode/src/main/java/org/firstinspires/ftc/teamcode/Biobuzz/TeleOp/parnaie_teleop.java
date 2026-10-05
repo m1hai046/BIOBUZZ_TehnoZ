@@ -2,35 +2,33 @@ package org.firstinspires.ftc.teamcode.Biobuzz.TeleOp;
 
 
 import com.bylazar.configurables.annotations.Configurable;
-import com.pedropathing.drivetrain.DrivePowers;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.math.Pose;
 import com.pedropathing.math.Velocity;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Biobuzz.Sisteme.IntakeTransfer;
 import org.firstinspires.ftc.teamcode.Biobuzz.Sisteme.Shooter;
-import org.firstinspires.ftc.teamcode.Biobuzz.Sisteme.Turret;
 import org.firstinspires.ftc.teamcode.Biobuzz.Useful.Globals;
 import org.firstinspires.ftc.teamcode.pedro.Constants;
 
 import java.util.List;
 
 @Configurable
-@TeleOp (name = "RED_TeleOp_no_sotm", group = "TeleOp")
-public class RED_TeleOp extends LinearOpMode {
+@TeleOp (name = "parnaie_teleop", group = "TeleOp")
+public class parnaie_teleop extends LinearOpMode {
 
     public IntakeTransfer intakeTransfer;
-    public Turret turret;
     public Shooter shooter;
-    public RobotState robotState;
     public ElapsedTime shootTimer;
+    public RobotState robotState;
     public ElapsedTime loops = new ElapsedTime();
-    public Follower follower;
+    //public Follower follower;
 
     private static final double trigger_threshold = 0.3;
     public double SHOOT_DURATION_MS = 800.0;
@@ -54,16 +52,18 @@ public class RED_TeleOp extends LinearOpMode {
 
 
         intakeTransfer = new IntakeTransfer(hardwareMap);
-        turret = new Turret(hardwareMap);
         shooter = new Shooter(hardwareMap);
+
 
         shootTimer = new ElapsedTime();
         loops = new ElapsedTime();
 
-        follower = Constants.create(hardwareMap);
+        //follower = Constants.create(hardwareMap);
 
-        follower.setPose(startingPose);///de vazut
-        follower.update();
+        //follower.setPose(startingPose);///de vazut
+        ///follower.update();
+
+
 
         Gamepad currentG1 = new Gamepad();
         Gamepad previousG1 = new Gamepad();
@@ -71,6 +71,24 @@ public class RED_TeleOp extends LinearOpMode {
         Gamepad previousG2 = new Gamepad();
 
         robotState = RobotState.DEFAULT;
+
+        DcMotor motorFrontLeft = hardwareMap.dcMotor.get("FLM");
+        DcMotor motorBackLeft = hardwareMap.dcMotor.get("BLM");
+        DcMotor motorFrontRight = hardwareMap.dcMotor.get("FRM");
+        DcMotor motorBackRight = hardwareMap.dcMotor.get("BRM");
+
+        motorBackLeft.setDirection(DcMotor.Direction.REVERSE);
+        motorFrontLeft.setDirection(DcMotor.Direction.REVERSE);
+
+        motorBackLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motorFrontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motorBackRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motorFrontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        motorBackLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        motorFrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        motorBackRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        motorFrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
 
         waitForStart();
@@ -85,35 +103,43 @@ public class RED_TeleOp extends LinearOpMode {
 
         while (opModeIsActive() && !isStopRequested()){
 
+
+
+
+            double y = gamepad1.left_stick_y; // Remember, this is reversed!
+            double x = -gamepad1.left_stick_x * 1.1; // Counteract imperfect strafing
+            double rx = -gamepad1.right_stick_x * 0.5;
+
+            double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
+            double frontLeftPower = (y + x + rx) / denominator;
+            double backLeftPower = (y - x + rx) / denominator;
+            double frontRightPower = (y - x - rx) / denominator;
+            double backRightPower = (y + x - rx) / denominator;
+            motorFrontLeft.setPower(frontLeftPower);
+            motorBackLeft.setPower(backLeftPower);
+            motorFrontRight.setPower(frontRightPower);
+            motorBackRight.setPower(backRightPower);
+
             previousG1.copy(currentG1);
             currentG1.copy(gamepad1);
             previousG2.copy(currentG2);
             currentG2.copy(gamepad2);
 
 
+
             for (LynxModule hub : allHubs) {
                 hub.clearBulkCache();
             }
 
-            Pose currentPose = follower.pose();
-            Velocity velocity = follower.velocity(); // Field-centric velocity
+            //Pose currentPose = follower.pose();
+            //Velocity velocity = follower.velocity(); // Field-centric velocity
 
-            shooter.update_shooter(
-                    currentPose.x(),
-                    currentPose.y()
-            );
-
-            turret.update_turret(
-                    currentPose.x(),
-                    currentPose.y(),
-                    currentPose.heading()
-            );
+            shooter.parnaie();
 
 
 
             handleControls(currentG1, previousG1, currentG2, previousG2);
-            follower.update();
-            handleMecanumDrive();
+            //follower.update();
             runStateMachine();
             update_telemetry();
             loops.reset();
@@ -145,21 +171,11 @@ public class RED_TeleOp extends LinearOpMode {
             }
         }
 
-        if (current.dpad_down && !previous.dpad_down) {
-            follower.setPose(startingPose);
-            Turret.offset = 0;
-            Shooter.rpmOffset = 0;
-        }
+//        if (current.dpad_down && !previous.dpad_down) {
+//            follower.setPose(startingPose);
+//        }
 
 
-        if (current2.b && !previous2.b) Shooter.rpmOffset += 20;
-        if (current2.a && !previous2.a) Shooter.rpmOffset -= 20;
-
-        if (current2.right_bumper && !previous2.right_bumper)
-            Turret.offset -= 1;
-        if (current2.left_bumper && !previous2.left_bumper) {
-            Turret.offset += 1;
-        }
 
     }
     public enum RobotState{
@@ -174,7 +190,6 @@ public class RED_TeleOp extends LinearOpMode {
         switch (robotState){
 
             case DEFAULT:
-                shooter.state = Shooter.State.RUNNING;
                 intakeTransfer.Off();
                 break;
 
@@ -183,61 +198,50 @@ public class RED_TeleOp extends LinearOpMode {
                 break;
 
             case REVERSE:
-                shooter.state = Shooter.State.RUNNING;
                 intakeTransfer.Reverse();
                 break;
 
             case SHOOT:
-                shooter.state = Shooter.State.SHOOTING;
                 intakeTransfer.Shoot();
-                if (shooter.state == Shooter.State.RUNNING) {
-                    robotState = RobotState.INTAKE;
-                }
                 break;
         }
     }
-    public void handleMecanumDrive(){
-        double turn = Math.signum(-gamepad1.right_stick_x)
-                * Math.pow(Math.abs(-gamepad1.right_stick_x), 2.0)
-                * 0.5;
-
-        follower.drivetrain.drive(
-                new DrivePowers(-gamepad1.left_stick_y,
-                        -gamepad1.left_stick_x * 1.1,
-                        turn
-                ),
-                false   // robot-centric
-        );
-    }
+//    public void handleMecanumDrive(){
+//        double y = -gamepad1.left_stick_y; // Remember, this is reversed!
+//        double x = gamepad1.left_stick_x * 1.1; // Counteract imperfect strafing
+//        double rx = gamepad1.right_stick_x * 0.5;
+//
+//        double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
+//        double frontLeftPower = (y + x + rx) / denominator;
+//        double backLeftPower = (y - x + rx) / denominator;
+//        double frontRightPower = (y - x - rx) / denominator;
+//        double backRightPower = (y + x - rx) / denominator;
+//        motorFrontLeft.setPower(frontLeftPower);
+//        motorBackLeft.setPower(backLeftPower);
+//        motorFrontRight.setPower(frontRightPower);
+//        motorBackRight.setPower(backRightPower);
+//    }
 
     public void update_telemetry(){
         telemetry.addLine("-------- ROBOT STATE --------");
         telemetry.addData("  State", robotState.name());
-        telemetry.addData("  failsafe", Globals.FAILSAFE_MODE);
 
-        telemetry.addLine("-------- SHOOTER --------");
-        telemetry.addData(" vel shooter ", shooter.motor_shooter.getVelocity());
-        telemetry.addData(" RPM target", "%.1f", Shooter.TARGET_VELOCITY);
 
 
         if (robotState == RobotState.SHOOT)
             telemetry.addData("  Shoot timer", "%.0f / %.0f ms",
                     shootTimer.milliseconds(), SHOOT_DURATION_MS);
 
-        telemetry.addLine("-------- TURELA --------");
-        telemetry.addData("  Unghi target", "%.1f°", Turret.target_position);
-        telemetry.addData("  Rate", "%.1f°/s", Turret.target_angle);
-
         telemetry.addLine("-------- INTAKE/TRANSFER --------");
         telemetry.addData("  Intake power", "%.2f", intakeTransfer.motorIntake.getPower());
         telemetry.addData("  Transfer power", "%.2f", intakeTransfer.motorTransfer.getPower());
 
-        telemetry.addLine("-------- LOCALIZARE --------");
-        telemetry.addData("  Pose X", "%.1f", follower.pose().x());
-        telemetry.addData("  Pose Y", "%.1f", follower.pose().y());
-        telemetry.addData("  Heading", "%.1f°", Math.toDegrees(follower.pose().heading()));
+//        telemetry.addLine("-------- LOCALIZARE --------");
+//        telemetry.addData("  Pose X", "%.1f", follower.pose().x());
+//        telemetry.addData("  Pose Y", "%.1f", follower.pose().y());
+//        telemetry.addData("  Heading", "%.1f°", Math.toDegrees(follower.pose().heading()));
 
-        telemetry.addData("distance from goal ", shooter.distance_from_goal);
+        //telemetry.addData("distance from goal ", shooter.distance_from_goal);
 
 
         telemetry.addLine("-------- PROFILING --------");

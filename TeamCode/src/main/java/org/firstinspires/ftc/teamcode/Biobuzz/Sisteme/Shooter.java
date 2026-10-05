@@ -31,8 +31,8 @@ public class Shooter {
 
     public VoltageSensor shooter_voltage;
     public static double TARGET_VELOCITY, HOOD_ANGLE, gateOpen = 0.2, gateClosed = 0.8;
-    public static double kP = 0.0, kV = 0.0, kS = 0.0, nominalVoltage = 12.0 , error;
-    public static double FAILSAFE_VELOCITY = 1000.0, FAILSAFE_ANGLE = 0.0, TARGET_STOPPED = 0.0;
+    public static double kP = 0.001 , kV = 0.0, kS = 0.0, nominalVoltage = 12.0 , error;
+    public static double FAILSAFE_VELOCITY = 1000.0, FAILSAFE_ANGLE = 0.2, TARGET_STOPPED = 0.0;
     public boolean running = false, shooting = false;
 
     ///poz goal aprox, de tunat
@@ -174,6 +174,34 @@ public class Shooter {
                 gateClosed();
                 break;
 
+        }
+    }
+
+    public void parnaie(){
+        running = true;
+        double vel = motor_shooter.getVelocity();
+
+        TARGET_VELOCITY = FAILSAFE_VELOCITY;
+        HOOD_ANGLE = FAILSAFE_ANGLE;
+
+        error = TARGET_VELOCITY - vel;
+
+
+
+        if (running) {
+
+            double voltageScaling = nominalVoltage / shooter_voltage.getVoltage();
+
+            double proportional = (kP * error);
+            double feedforward = (kV * TARGET_VELOCITY) + kS;
+
+            double pow = (proportional + feedforward) * voltageScaling;
+
+            pow = Math.max(-1.0, Math.min(1.0, pow));
+
+            motor_shooter.setPower(pow);
+            motor_shooter_2.setPower(pow);
+            hood.setPosition(HOOD_ANGLE);
         }
     }
 

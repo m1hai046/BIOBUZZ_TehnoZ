@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.Biobuzz.TeleOp;
 
-
 import com.bylazar.configurables.annotations.Configurable;
 import com.pedropathing.drivetrain.DrivePowers;
 import com.pedropathing.follower.Follower;
@@ -20,27 +19,28 @@ import org.firstinspires.ftc.teamcode.pedro.Constants;
 
 import java.util.List;
 
-@Configurable
-@TeleOp (name = "RED_TeleOp_no_sotm", group = "TeleOp")
-public class RED_TeleOp extends LinearOpMode {
+import kotlin.internal.ContractsDsl;
 
-    public IntakeTransfer intakeTransfer;
+@Configurable
+@TeleOp (name = "Teleop_tuning", group = "TeleOp")
+public class Teleop_tuning extends LinearOpMode {
+
+    public static double left_pos = 0.5, right_pos = 0.7;
     public Turret turret;
     public Shooter shooter;
-    public RobotState robotState;
     public ElapsedTime shootTimer;
     public ElapsedTime loops = new ElapsedTime();
-    public Follower follower;
 
     private static final double trigger_threshold = 0.3;
     public double SHOOT_DURATION_MS = 800.0;
-    public static Pose startingPose = new Pose(55, 39, Math.toRadians(90));///de vazut
+    public static Pose startingPose = new Pose(55, 39, Math.toRadians(90));
+    /// de vazut
 
 
     public List<LynxModule> allHubs;
 
     @Override
-    public void runOpMode(){
+    public void runOpMode() {
 
         Globals.alliance = Globals.Alliance.RED;
         Globals.faze = Globals.FAZE.TELEOP;
@@ -53,24 +53,17 @@ public class RED_TeleOp extends LinearOpMode {
         telemetry.setMsTransmissionInterval(11);
 
 
-        intakeTransfer = new IntakeTransfer(hardwareMap);
         turret = new Turret(hardwareMap);
         shooter = new Shooter(hardwareMap);
 
         shootTimer = new ElapsedTime();
         loops = new ElapsedTime();
 
-        follower = Constants.create(hardwareMap);
-
-        follower.setPose(startingPose);///de vazut
-        follower.update();
 
         Gamepad currentG1 = new Gamepad();
         Gamepad previousG1 = new Gamepad();
         Gamepad currentG2 = new Gamepad();
         Gamepad previousG2 = new Gamepad();
-
-        robotState = RobotState.DEFAULT;
 
 
         waitForStart();
@@ -83,7 +76,7 @@ public class RED_TeleOp extends LinearOpMode {
         }
 
 
-        while (opModeIsActive() && !isStopRequested()){
+        while (opModeIsActive() && !isStopRequested()) {
 
             previousG1.copy(currentG1);
             currentG1.copy(gamepad1);
@@ -95,63 +88,24 @@ public class RED_TeleOp extends LinearOpMode {
                 hub.clearBulkCache();
             }
 
-            Pose currentPose = follower.pose();
-            Velocity velocity = follower.velocity(); // Field-centric velocity
-
-            shooter.update_shooter(
-                    currentPose.x(),
-                    currentPose.y()
-            );
-
-            turret.update_turret(
-                    currentPose.x(),
-                    currentPose.y(),
-                    currentPose.heading()
-            );
-
-
 
             handleControls(currentG1, previousG1, currentG2, previousG2);
-            follower.update();
-            handleMecanumDrive();
-            runStateMachine();
             update_telemetry();
             loops.reset();
 
         }
     }
 
-    public void handleControls(Gamepad current, Gamepad previous, Gamepad current2, Gamepad previous2){
-        if (current.right_bumper && !previous.right_bumper) {
-            robotState = (robotState == RobotState.INTAKE)
-                    ? RobotState.DEFAULT : RobotState.INTAKE;
-        }
+    public void handleControls(Gamepad current, Gamepad previous, Gamepad current2, Gamepad previous2) {
 
+
+        if (current.right_bumper && !previous.right_bumper){
+            turret.servo_left.setPosition(right_pos);
+            turret.servo_right.setPosition(right_pos);}
         if (current.left_bumper && !previous.left_bumper) {
-            robotState = (robotState == RobotState.REVERSE)
-                    ? RobotState.DEFAULT : RobotState.REVERSE;
+            turret.servo_left.setPosition(left_pos);
+            turret.servo_right.setPosition(left_pos);
         }
-
-        if (current.touchpad && !previous.touchpad) {
-            Globals.FAILSAFE_MODE = !Globals.FAILSAFE_MODE;
-        }
-
-
-        if (current.right_trigger > trigger_threshold
-                && previous.right_trigger <= trigger_threshold) {
-            if (robotState != RobotState.SHOOT) {
-                robotState = RobotState.SHOOT;
-                shootTimer.reset();
-            }
-        }
-
-        if (current.dpad_down && !previous.dpad_down) {
-            follower.setPose(startingPose);
-            Turret.offset = 0;
-            Shooter.rpmOffset = 0;
-        }
-
-
         if (current2.b && !previous2.b) Shooter.rpmOffset += 20;
         if (current2.a && !previous2.a) Shooter.rpmOffset -= 20;
 
@@ -162,7 +116,8 @@ public class RED_TeleOp extends LinearOpMode {
         }
 
     }
-    public enum RobotState{
+
+    public enum RobotState {
         DEFAULT, // intake off, transfer off, gate closed, shooter off
         INTAKE,  // intake on, transfer on (low), gate closed, shooter on
         REVERSE, // intake on (reverse), transfer on (high→reverse), gate closed
@@ -170,49 +125,11 @@ public class RED_TeleOp extends LinearOpMode {
 
     }
 
-    public void runStateMachine(){
-        switch (robotState){
 
-            case DEFAULT:
-                shooter.state = Shooter.State.RUNNING;
-                intakeTransfer.Off();
-                break;
 
-            case INTAKE:
-                intakeTransfer.Collect();
-                break;
-
-            case REVERSE:
-                shooter.state = Shooter.State.RUNNING;
-                intakeTransfer.Reverse();
-                break;
-
-            case SHOOT:
-                shooter.state = Shooter.State.SHOOTING;
-                intakeTransfer.Shoot();
-                if (shooter.state == Shooter.State.RUNNING) {
-                    robotState = RobotState.INTAKE;
-                }
-                break;
-        }
-    }
-    public void handleMecanumDrive(){
-        double turn = Math.signum(-gamepad1.right_stick_x)
-                * Math.pow(Math.abs(-gamepad1.right_stick_x), 2.0)
-                * 0.5;
-
-        follower.drivetrain.drive(
-                new DrivePowers(-gamepad1.left_stick_y,
-                        -gamepad1.left_stick_x * 1.1,
-                        turn
-                ),
-                false   // robot-centric
-        );
-    }
 
     public void update_telemetry(){
         telemetry.addLine("-------- ROBOT STATE --------");
-        telemetry.addData("  State", robotState.name());
         telemetry.addData("  failsafe", Globals.FAILSAFE_MODE);
 
         telemetry.addLine("-------- SHOOTER --------");
@@ -220,22 +137,12 @@ public class RED_TeleOp extends LinearOpMode {
         telemetry.addData(" RPM target", "%.1f", Shooter.TARGET_VELOCITY);
 
 
-        if (robotState == RobotState.SHOOT)
-            telemetry.addData("  Shoot timer", "%.0f / %.0f ms",
-                    shootTimer.milliseconds(), SHOOT_DURATION_MS);
+
 
         telemetry.addLine("-------- TURELA --------");
         telemetry.addData("  Unghi target", "%.1f°", Turret.target_position);
         telemetry.addData("  Rate", "%.1f°/s", Turret.target_angle);
 
-        telemetry.addLine("-------- INTAKE/TRANSFER --------");
-        telemetry.addData("  Intake power", "%.2f", intakeTransfer.motorIntake.getPower());
-        telemetry.addData("  Transfer power", "%.2f", intakeTransfer.motorTransfer.getPower());
-
-        telemetry.addLine("-------- LOCALIZARE --------");
-        telemetry.addData("  Pose X", "%.1f", follower.pose().x());
-        telemetry.addData("  Pose Y", "%.1f", follower.pose().y());
-        telemetry.addData("  Heading", "%.1f°", Math.toDegrees(follower.pose().heading()));
 
         telemetry.addData("distance from goal ", shooter.distance_from_goal);
 
@@ -259,3 +166,4 @@ public class RED_TeleOp extends LinearOpMode {
         telemetry.update();
     }
 }
+
