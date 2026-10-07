@@ -38,8 +38,10 @@ public class Shooter {
     ///poz goal aprox, de tunat
     public static double X_GOAL_RED_SUP = 58, Y_GOAL_RED_SUP = 82, X_GOAL_RED_INF = 58, Y_GOAL_RED_INF = 58;
     public static double X_GOAL_BLUE_SUP = 84, Y_GOAL_BLUE_SUP = 82, X_GOAL_BLUE_INF = 84, Y_GOAL_BLUE_INF = 58;
+    public static double goalX, goalY;
+
     public static double X_OFFSET_GAIN = 0.15, MAX_X_OFFSET = 4.0;
-    public static double minHoodAngle = 0.0, maxHoodAngle = 1.0, minShooterRpm = 1000.0, maxShooterRpm = 1900.0;
+    public static double minHoodAngle = 0.3, maxHoodAngle = 0.8, minShooterRpm = 1650.0, maxShooterRpm = 1800.0;
     public static double rpmOffset = 0.0;
 
     public State state;
@@ -89,7 +91,6 @@ public class Shooter {
         double vel = motor_shooter.getVelocity();
 
 
-        double goalX, goalY;
         if(Globals.alliance == Globals.Alliance.RED){
             if (y >70.7) {///sup
                 goalX = X_GOAL_RED_SUP;
@@ -160,7 +161,7 @@ public class Shooter {
                 running = true;
                 if (Math.abs(error) <= 100) {
                     gateOpen();
-                    if (shootTimer.milliseconds() > 800) {///trb pus timer in teleop cand apesi pe buton sa isi dea reset
+                    if (shootTimer.milliseconds() > 800) {
                         state = State.RUNNING;
                     }
                 }
@@ -229,7 +230,6 @@ public class Shooter {
         Globals.predY = predY;
 
 
-        double goalX, goalY;
         if(Globals.alliance == Globals.Alliance.RED){
             if (y >70.7) {///sup
                 goalX = X_GOAL_RED_SUP;
@@ -345,10 +345,10 @@ public class Shooter {
     }
 
     public double optimalAngle(double dist){
-        return Utils.clamp(2, minHoodAngle, maxHoodAngle);///in loc de 2 bagi functia
+        return Utils.clamp((0.02 * dist) - 0.3, minHoodAngle, maxHoodAngle);
     }
     public double optimalRpm(double dist){
-        return Utils.clamp(2, minShooterRpm, maxShooterRpm);///in loc de 2 bagi functia
+        return Utils.clamp((0.0175 * Math.pow(dist, 3) - 2.35 * Math.pow(dist, 2) + 109.75 * dist + 0.0), minShooterRpm, maxShooterRpm);
     }
 
     public double xGoalOffset(double goalX, double robotX, double goalY, double robotY){
