@@ -30,19 +30,19 @@ import dev.frozenmilk.dairy.cachinghardware.CachingServo;
 public class Shooter {
 
     public VoltageSensor shooter_voltage;
-    public static double TARGET_VELOCITY, HOOD_ANGLE, gateOpen = 0.15, gateClosed = 0.5;
-    public static double kP = 0.000375 , kV = 0.0004, kS = 0.05, nominalVoltage = 12.0 , error;
-    public static double FAILSAFE_VELOCITY = 1000.0, FAILSAFE_ANGLE = 0.2, TARGET_STOPPED = 0.0;
+    public static double TARGET_VELOCITY, HOOD_ANGLE, gateOpen = 0.3, gateClosed = 0.0;
+    public static double kP = 0.00065 , kV = 0.000385, kS = 0.05, nominalVoltage = 12.0 , error;
+    public static double FAILSAFE_VELOCITY = 1500.0, FAILSAFE_ANGLE = 0.5, TARGET_STOPPED = 0.0;
     public boolean running = false, shooting = false;
 
     ///poz goal aprox, de tunat
-    public static double X_GOAL_RED_SUP = 58, Y_GOAL_RED_SUP = 82, X_GOAL_RED_INF = 58, Y_GOAL_RED_INF = 58;
+    public static double X_GOAL_RED_SUP = 58, Y_GOAL_RED_SUP = 82, X_GOAL_RED_INF = 63, Y_GOAL_RED_INF = 58;
     public static double X_GOAL_BLUE_SUP = 84, Y_GOAL_BLUE_SUP = 82, X_GOAL_BLUE_INF = 84, Y_GOAL_BLUE_INF = 58;
     public static double goalX, goalY;
 
-    public static double X_OFFSET_GAIN = 0.15, MAX_X_OFFSET = 4.0;
-    public static double minHoodAngle = 0.3, maxHoodAngle = 0.8, minShooterRpm = 1650.0, maxShooterRpm = 1800.0;
-    public static double rpmOffset = 0.0;
+    public static double X_OFFSET_GAIN = 0.15, MAX_X_OFFSET = 0.0;
+    public static double minHoodAngle = 0.0, maxHoodAngle = 0.95, minShooterRpm = 1650.0, maxShooterRpm = 1820.0;///1820
+    public static double rpmOffset = 120.0;
 
     public State state;
     public State previousState = State.RUNNING;
@@ -345,11 +345,29 @@ public class Shooter {
     }
 
     public double optimalAngle(double dist){
-        return Utils.clamp((0.02 * dist) - 0.3, minHoodAngle, maxHoodAngle);
+        double angle = -0.00000125 * Math.pow(dist, 4)
+                +  0.000314815 * Math.pow(dist, 3)
+                -  0.0291042 * Math.pow(dist, 2)
+                +  1.18102 * dist
+                -  17.29939;
+        return Utils.clamp(angle, minHoodAngle, maxHoodAngle);
     }
+//    public double optimalAngle(double dist){
+//        return Utils.clamp((0.02 * dist) - 0.3, minHoodAngle, maxHoodAngle);
+//    }
+
+
     public double optimalRpm(double dist){
-        return Utils.clamp((0.0175 * Math.pow(dist, 3) - 2.35 * Math.pow(dist, 2) + 109.75 * dist + 0.0), minShooterRpm, maxShooterRpm);
+        double rpm = -0.0000416667 * Math.pow(dist, 4)
+                +  0.00703704   * Math.pow(dist, 3)
+                -  0.30625      * Math.pow(dist, 2)
+                +  2.0463       * dist
+                +  1713.23785;
+        return Utils.clamp(rpm, minShooterRpm, maxShooterRpm);
     }
+//    public double optimalRpm(double dist){
+//        return Utils.clamp((0.0175 * Math.pow(dist, 3) - 2.35 * Math.pow(dist, 2) + 109.75 * dist + 0.0), minShooterRpm, maxShooterRpm);
+//    }
 
     public double xGoalOffset(double goalX, double robotX, double goalY, double robotY){
         double lateral = goalX - robotX;
@@ -359,7 +377,14 @@ public class Shooter {
         if (hypot < 0.01) return 0;
 
         double sinVal = lateral / hypot;
-        return Utils.clamp(sinVal * X_OFFSET_GAIN, -MAX_X_OFFSET, MAX_X_OFFSET);
+        if (robotY >70.7)
+        {
+            return Utils.clamp(sinVal * X_OFFSET_GAIN, MAX_X_OFFSET, -MAX_X_OFFSET);
+
+        }
+        else {
+            return Utils.clamp(sinVal * X_OFFSET_GAIN, -MAX_X_OFFSET, MAX_X_OFFSET);
+        }
     }
 
 

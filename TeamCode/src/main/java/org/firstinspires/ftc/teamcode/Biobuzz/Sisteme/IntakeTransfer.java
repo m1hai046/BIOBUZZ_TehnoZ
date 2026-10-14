@@ -12,15 +12,15 @@ public class IntakeTransfer {
     public CachingDcMotorEx motorIntake, motorTransfer;
 
     /// VARIABILE INTAKE
-    public static double powIntake = 0.9;
+    public static double powIntake = 0.8;
     public static double powReverse = -1;
     public static double powOff = 0;
 
 
     /// VARIABILE TRANSFER
-    public static double powTransferCollect = 0.7; //0.35
+    public static double powTransferCollect = 0.4; //0.35
     /// gate  inchis
-    public static double powTransferShoot = 0.85;///0.6   ///gate deschis
+    public static double powTransferShoot = 0.6;///0.6   ///gate deschis
 
 
     public IntakeTransfer(HardwareMap hardwareMap){

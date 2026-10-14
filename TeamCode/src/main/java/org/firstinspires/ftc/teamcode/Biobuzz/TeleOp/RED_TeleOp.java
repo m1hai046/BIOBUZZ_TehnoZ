@@ -24,7 +24,7 @@ import org.firstinspires.ftc.teamcode.pedro.Constants;
 import java.util.List;
 
 @Configurable
-@TeleOp (name = "RED_TeleOp_no_sotm", group = "TeleOp")
+@TeleOp (name = "RED_TeleOp_no_sotm_no_pedro", group = "TeleOp")
 public class RED_TeleOp extends LinearOpMode {
 
     public DcMotorEx frontLeft, frontRight, backLeft, backRight;
@@ -261,6 +261,10 @@ public class RED_TeleOp extends LinearOpMode {
         telemetry.addData(" vel shooter ", shooter.motor_shooter.getVelocity());
         telemetry.addData(" RPM target", "%.1f", Shooter.TARGET_VELOCITY);
         telemetry.addData(" hood angle", Shooter.HOOD_ANGLE);
+        telemetry.addData("  goalX", Shooter.goalX);
+        telemetry.addData("  goalY", Shooter.goalY);
+        telemetry.addData("  voltaj_shooter", shooter.shooter_voltage.getVoltage());
+
 //        telemetry.addData(" gate pos", Shooter.);
 
 
@@ -273,6 +277,7 @@ public class RED_TeleOp extends LinearOpMode {
         telemetry.addData("  Rate", "%.1f°/s", Turret.target_angle);
         telemetry.addData("  goalX", Turret.goalX);
         telemetry.addData("  goalY", Turret.goalY);
+
 
 
         telemetry.addLine("-------- INTAKE/TRANSFER --------");

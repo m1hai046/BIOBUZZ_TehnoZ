@@ -18,9 +18,9 @@ import dev.frozenmilk.dairy.cachinghardware.CachingServo;
 public class Turret {
 
     public static double target_angle, relative_angle, target_position, failsafe_position = 0.5;
-    public static double X_GOAL_RED_SUP = 58, Y_GOAL_RED_SUP = 82, X_GOAL_RED_INF = 58, Y_GOAL_RED_INF = 58;
+    public static double X_GOAL_RED_SUP = 58, Y_GOAL_RED_SUP = 82, X_GOAL_RED_INF = 63, Y_GOAL_RED_INF = 58;
     public static double X_GOAL_BLUE_SUP = 84, Y_GOAL_BLUE_SUP = 82, X_GOAL_BLUE_INF = 84, Y_GOAL_BLUE_INF = 58;
-    public static double X_OFFSET_GAIN = 0.15, MAX_X_OFFSET = 4.0;//
+    public static double X_OFFSET_GAIN = 0.15, MAX_X_OFFSET = 0.0;//
     public static double shooterWorldX, shooterWorldY, shooterOffset = -1.811; ///de pus offset ul de la poz shooter ului
     public static double MIN_ANGLE = -180.0, MAX_ANGLE = 180.0, MIN_POS = 0.055, MAX_POS = 0.96;///de tunat
     public static double goalX, goalY;
@@ -158,7 +158,14 @@ public class Turret {
         if (hypot < 0.01) return 0;
 
         double sinVal = lateral / hypot;
-        return Utils.clamp(sinVal * X_OFFSET_GAIN, -MAX_X_OFFSET, MAX_X_OFFSET);
+        if (robotY >70.7)
+        {
+            return Utils.clamp(sinVal * X_OFFSET_GAIN, MAX_X_OFFSET, -MAX_X_OFFSET);
+
+        }
+        else {
+            return Utils.clamp(sinVal * X_OFFSET_GAIN, -MAX_X_OFFSET, MAX_X_OFFSET);
+        }
     }
 
 }

@@ -7,6 +7,7 @@ import com.pedropathing.follower.Follower;
 import com.pedropathing.math.Pose;
 import com.pedropathing.math.Velocity;
 import com.qualcomm.hardware.lynx.LynxModule;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -20,6 +21,7 @@ import org.firstinspires.ftc.teamcode.pedro.Constants;
 
 import java.util.List;
 
+@Disabled
 @Configurable
 @TeleOp (name = "RED_TeleOp_sotm", group = "TeleOp")
 public class RED_TeleOp_sotm extends LinearOpMode {
