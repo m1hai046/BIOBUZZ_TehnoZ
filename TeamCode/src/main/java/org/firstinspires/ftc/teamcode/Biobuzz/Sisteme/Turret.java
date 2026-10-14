@@ -18,8 +18,6 @@ import dev.frozenmilk.dairy.cachinghardware.CachingServo;
 public class Turret {
 
     public static double target_angle, relative_angle, target_position, failsafe_position = 0.5;
-    public static double X_GOAL_RED_SUP = 58, Y_GOAL_RED_SUP = 82, X_GOAL_RED_INF = 63, Y_GOAL_RED_INF = 58;
-    public static double X_GOAL_BLUE_SUP = 84, Y_GOAL_BLUE_SUP = 82, X_GOAL_BLUE_INF = 84, Y_GOAL_BLUE_INF = 58;
     public static double X_OFFSET_GAIN = 0.15, MAX_X_OFFSET = 0.0;//
     public static double shooterWorldX, shooterWorldY, shooterOffset = -1.811; ///de pus offset ul de la poz shooter ului
     public static double MIN_ANGLE = -180.0, MAX_ANGLE = 180.0, MIN_POS = 0.055, MAX_POS = 0.96;///de tunat
@@ -46,23 +44,23 @@ public class Turret {
 
         if(Globals.alliance == Globals.Alliance.RED){
             if (y >70.7) {///sup
-                goalX = X_GOAL_RED_SUP;
-                goalY = Y_GOAL_RED_SUP;
+                goalX = Globals.X_GOAL_RED_SUP;
+                goalY = Globals.Y_GOAL_RED_SUP;
             }
             else{///inf
-                goalX = X_GOAL_RED_INF;
-                goalY = Y_GOAL_RED_INF;
+                goalX = Globals.X_GOAL_RED_INF;
+                goalY = Globals.Y_GOAL_RED_INF;
             }
         }
 
         else {
             if (y >70.7) {///sup
-                goalX = X_GOAL_BLUE_SUP;
-                goalY = Y_GOAL_BLUE_SUP;
+                goalX = Globals.X_GOAL_BLUE_SUP;
+                goalY = Globals.Y_GOAL_BLUE_SUP;
             }
             else{///inf
-                goalX = X_GOAL_BLUE_INF;
-                goalY = Y_GOAL_BLUE_INF;
+                goalX = Globals.X_GOAL_BLUE_INF;
+                goalY = Globals.Y_GOAL_BLUE_INF;
             }
         }
         double hiveAngleOffset = xGoalOffset(goalX, x, goalY, y);
@@ -99,23 +97,23 @@ public class Turret {
 
         if(Globals.alliance == Globals.Alliance.RED){
             if (y >70.7) {///sup
-                goalX = X_GOAL_RED_SUP;
-                goalY = Y_GOAL_RED_SUP;
+                goalX = Globals.X_GOAL_RED_SUP;
+                goalY = Globals.Y_GOAL_RED_SUP;
             }
             else{///inf
-                goalX = X_GOAL_RED_INF;
-                goalY = Y_GOAL_RED_INF;
+                goalX = Globals.X_GOAL_RED_INF;
+                goalY = Globals.Y_GOAL_RED_INF;
             }
         }
 
         else {
             if (y >70.7) {///sup
-                goalX = X_GOAL_BLUE_SUP;
-                goalY = Y_GOAL_BLUE_SUP;
+                goalX = Globals.X_GOAL_BLUE_SUP;
+                goalY = Globals.Y_GOAL_BLUE_SUP;
             }
             else{///inf
-                goalX = X_GOAL_BLUE_INF;
-                goalY = Y_GOAL_BLUE_INF;
+                goalX = Globals.X_GOAL_BLUE_INF;
+                goalY = Globals.Y_GOAL_BLUE_INF;
             }
         }
 

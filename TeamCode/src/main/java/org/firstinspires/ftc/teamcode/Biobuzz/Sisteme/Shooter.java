@@ -34,10 +34,6 @@ public class Shooter {
     public static double kP = 0.00065 , kV = 0.000385, kS = 0.05, nominalVoltage = 12.0 , error;
     public static double FAILSAFE_VELOCITY = 1500.0, FAILSAFE_ANGLE = 0.5, TARGET_STOPPED = 0.0;
     public boolean running = false, shooting = false;
-
-    ///poz goal aprox, de tunat
-    public static double X_GOAL_RED_SUP = 58, Y_GOAL_RED_SUP = 82, X_GOAL_RED_INF = 63, Y_GOAL_RED_INF = 58;
-    public static double X_GOAL_BLUE_SUP = 84, Y_GOAL_BLUE_SUP = 82, X_GOAL_BLUE_INF = 84, Y_GOAL_BLUE_INF = 58;
     public static double goalX, goalY;
 
     public static double X_OFFSET_GAIN = 0.15, MAX_X_OFFSET = 0.0;
@@ -93,23 +89,23 @@ public class Shooter {
 
         if(Globals.alliance == Globals.Alliance.RED){
             if (y >70.7) {///sup
-                goalX = X_GOAL_RED_SUP;
-                goalY = Y_GOAL_RED_SUP;
+                goalX = Globals.X_GOAL_RED_SUP;
+                goalY = Globals.Y_GOAL_RED_SUP;
             }
             else{///inf
-                goalX = X_GOAL_RED_INF;
-                goalY = Y_GOAL_RED_INF;
+                goalX = Globals.X_GOAL_RED_INF;
+                goalY = Globals.Y_GOAL_RED_INF;
             }
         }
 
         else {
             if (y >70.7) {///sup
-                goalX = X_GOAL_BLUE_SUP;
-                goalY = Y_GOAL_BLUE_SUP;
+                goalX = Globals.X_GOAL_BLUE_SUP;
+                goalY = Globals.Y_GOAL_BLUE_SUP;
             }
             else{///inf
-                goalX = X_GOAL_BLUE_INF;
-                goalY = Y_GOAL_BLUE_INF;
+                goalX = Globals.X_GOAL_BLUE_INF;
+                goalY = Globals.Y_GOAL_BLUE_INF;
             }
         }
 
@@ -232,23 +228,23 @@ public class Shooter {
 
         if(Globals.alliance == Globals.Alliance.RED){
             if (y >70.7) {///sup
-                goalX = X_GOAL_RED_SUP;
-                goalY = Y_GOAL_RED_SUP;
+                goalX = Globals.X_GOAL_RED_SUP;
+                goalY = Globals.Y_GOAL_RED_SUP;
             }
             else{///inf
-                goalX = X_GOAL_RED_INF;
-                goalY = Y_GOAL_RED_INF;
+                goalX = Globals.X_GOAL_RED_INF;
+                goalY = Globals.Y_GOAL_RED_INF;
             }
         }
 
         else {
             if (y >70.7) {///sup
-                goalX = X_GOAL_BLUE_SUP;
-                goalY = Y_GOAL_BLUE_SUP;
+                goalX = Globals.X_GOAL_BLUE_SUP;
+                goalY = Globals.Y_GOAL_BLUE_SUP;
             }
             else{///inf
-                goalX = X_GOAL_BLUE_INF;
-                goalY = Y_GOAL_BLUE_INF;
+                goalX = Globals.X_GOAL_BLUE_INF;
+                goalY = Globals.Y_GOAL_BLUE_INF;
             }
         }
 

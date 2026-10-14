@@ -22,8 +22,8 @@ import org.firstinspires.ftc.teamcode.pedro.Constants;
 
 public class RED_Auto extends LinearOpMode {
 
-    public Pose startPose = new Pose(0,0, Math.toRadians(0));
-    public Pose spikePose = new Pose(10,10, Math.toRadians(0));
+    public Pose startPose = new Pose(32,8.5, Math.toRadians(180));
+    public Pose spikePose = new Pose(9.1,8.5, Math.toRadians(181));
     public Follower follower;
     public ElapsedTime pathTimer;
     public IntakeTransfer intakeTransfer;
