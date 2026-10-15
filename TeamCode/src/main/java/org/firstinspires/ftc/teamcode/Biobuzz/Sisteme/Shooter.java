@@ -37,8 +37,8 @@ public class Shooter {
     public static double goalX, goalY;
 
     public static double X_OFFSET_GAIN = 0.15, MAX_X_OFFSET = 0.0;
-    public static double minHoodAngle = 0.0, maxHoodAngle = 0.95, minShooterRpm = 1650.0, maxShooterRpm = 1820.0;///1820
-    public static double rpmOffset = 120.0;
+    public static double minHoodAngle = 0.0, maxHoodAngle = 0.95, minShooterRpm = 1770.0, maxShooterRpm = 1940.0;///1820
+    public static double rpmOffset = 0.0;
 
     public State state;
     public State previousState = State.RUNNING;

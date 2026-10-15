@@ -45,7 +45,6 @@ public class TeleOp_Methods {
             Globals.FAILSAFE_MODE = !Globals.FAILSAFE_MODE;
         }
 
-
         if (current.right_trigger > trigger_threshold
                 && previous.right_trigger <= trigger_threshold) {
             if (robotState != RobotState.SHOOT) {
@@ -54,8 +53,11 @@ public class TeleOp_Methods {
             }
         }
 
-
-
+        if (current.dpad_down && !previous.dpad_down) {
+            follower.setPose(startingPose);
+            Turret.offset = 0;
+            Shooter.rpmOffset = 0;
+        }
 
         if (current2.b && !previous2.b) Shooter.rpmOffset += 20;
         if (current2.a && !previous2.a) Shooter.rpmOffset -= 20;

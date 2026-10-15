@@ -23,7 +23,7 @@ import org.firstinspires.ftc.teamcode.pedro.Constants;
 public class RED_Auto extends LinearOpMode {
 
     public Pose startPose = new Pose(32,8.5, Math.toRadians(180));
-    public Pose spikePose = new Pose(9.1,8.5, Math.toRadians(181));
+    public Pose spikePose = new Pose(8.1,8.5, Math.toRadians(181));
     public Follower follower;
     public ElapsedTime pathTimer;
     public IntakeTransfer intakeTransfer;
@@ -97,7 +97,7 @@ public class RED_Auto extends LinearOpMode {
                 break;
 
                 case 2:
-                if (!follower.following() && shooter.state == Shooter.State.SHOOTING){
+                if (!follower.following()){
                     shooter.state = Shooter.State.SHOOTING;
                     setPathState(-1);
                 }
