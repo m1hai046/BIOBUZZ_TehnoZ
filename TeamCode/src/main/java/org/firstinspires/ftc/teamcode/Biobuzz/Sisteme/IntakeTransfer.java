@@ -18,9 +18,9 @@ public class IntakeTransfer {
 
 
     /// VARIABILE TRANSFER
-    public static double powTransferCollect = 0.4; //0.35
+    public static double powTransferCollect = 0.4;
     /// gate  inchis
-    public static double powTransferShoot = 0.6;///0.6   ///gate deschis
+    public static double powTransferShoot = 0.95;   ///gate deschis
 
 
     public IntakeTransfer(HardwareMap hardwareMap){

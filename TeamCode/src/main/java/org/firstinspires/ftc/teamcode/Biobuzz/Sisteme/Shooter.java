@@ -37,7 +37,7 @@ public class Shooter {
     public static double goalX, goalY;
 
     public static double X_OFFSET_GAIN = 0.15, MAX_X_OFFSET = 0.0;
-    public static double minHoodAngle = 0.0, maxHoodAngle = 0.95, minShooterRpm = 1770.0, maxShooterRpm = 1940.0;///1820
+    public static double minHoodAngle = 0.0, maxHoodAngle = 0.65, minShooterRpm = 1850.0, maxShooterRpm = 2000.0;
     public static double rpmOffset = 0.0;
 
     public State state;
@@ -73,7 +73,6 @@ public class Shooter {
         shooter_voltage = hardwareMap.voltageSensor.iterator().next();
 
         shootTimer = new ElapsedTime();
-
 
     }
 
@@ -171,34 +170,6 @@ public class Shooter {
                 gateClosed();
                 break;
 
-        }
-    }
-
-    public void parnaie(){
-        running = true;
-        double vel = motor_shooter.getVelocity();
-
-        TARGET_VELOCITY = FAILSAFE_VELOCITY;
-        HOOD_ANGLE = FAILSAFE_ANGLE;
-
-        error = TARGET_VELOCITY - vel;
-
-
-
-        if (running) {
-
-            double voltageScaling = nominalVoltage / shooter_voltage.getVoltage();
-
-            double proportional = (kP * error);
-            double feedforward = (kV * TARGET_VELOCITY) + kS;
-
-            double pow = (proportional + feedforward) * voltageScaling;
-
-            pow = Math.max(-1.0, Math.min(1.0, pow));
-
-            motor_shooter.setPower(pow);
-            motor_shooter_2.setPower(pow);
-            hood.setPosition(HOOD_ANGLE);
         }
     }
 
@@ -340,30 +311,44 @@ public class Shooter {
         return motor_shooter_2.getVelocity();
     }
 
+//    public double optimalAngle(double dist){
+//        double angle = -0.00000125 * Math.pow(dist, 4)
+//                +  0.000314815 * Math.pow(dist, 3)
+//                -  0.0291042 * Math.pow(dist, 2)
+//                +  1.18102 * dist
+//                -  17.29939;
+//        return Utils.clamp(angle, minHoodAngle, maxHoodAngle);
+//    }
+
     public double optimalAngle(double dist){
-        double angle = -0.00000125 * Math.pow(dist, 4)
-                +  0.000314815 * Math.pow(dist, 3)
-                -  0.0291042 * Math.pow(dist, 2)
-                +  1.18102 * dist
-                -  17.29939;
+        double angle = -0.00000145833 * Math.pow(dist, 4)
+                +  0.000291667   * Math.pow(dist, 3)
+                -  0.0210104     * Math.pow(dist, 2)
+                +  0.662708      * dist
+                -  7.77383;
         return Utils.clamp(angle, minHoodAngle, maxHoodAngle);
     }
-//    public double optimalAngle(double dist){
-//        return Utils.clamp((0.02 * dist) - 0.3, minHoodAngle, maxHoodAngle);
-//    }
 
+
+
+//    public double optimalRpm(double dist){
+//        double rpm = -0.0000416667 * Math.pow(dist, 4)
+//                +  0.00703704   * Math.pow(dist, 3)
+//                -  0.30625      * Math.pow(dist, 2)
+//                +  2.0463       * dist
+//                +  1713.23785;
+//        return Utils.clamp(rpm, minShooterRpm, maxShooterRpm);
+//    }
 
     public double optimalRpm(double dist){
-        double rpm = -0.0000416667 * Math.pow(dist, 4)
-                +  0.00703704   * Math.pow(dist, 3)
-                -  0.30625      * Math.pow(dist, 2)
-                +  2.0463       * dist
-                +  1713.23785;
+        double rpm = 0.000541667 * Math.pow(dist, 4)
+                - 0.13        * Math.pow(dist, 3)
+                + 11.46458    * Math.pow(dist, 2)
+                - 433.75      * dist
+                + 7748.04688;
         return Utils.clamp(rpm, minShooterRpm, maxShooterRpm);
     }
-//    public double optimalRpm(double dist){
-//        return Utils.clamp((0.0175 * Math.pow(dist, 3) - 2.35 * Math.pow(dist, 2) + 109.75 * dist + 0.0), minShooterRpm, maxShooterRpm);
-//    }
+
 
     public double xGoalOffset(double goalX, double robotX, double goalY, double robotY){
         double lateral = goalX - robotX;

@@ -20,7 +20,7 @@ public class Turret {
     public static double target_angle, relative_angle, target_position, failsafe_position = 0.5;
     public static double X_OFFSET_GAIN = 0.15, MAX_X_OFFSET = 0.0;//
     public static double shooterWorldX, shooterWorldY, shooterOffset = -1.811; ///de pus offset ul de la poz shooter ului
-    public static double MIN_ANGLE = -180.0, MAX_ANGLE = 180.0, MIN_POS = 0.055, MAX_POS = 0.96;///de tunat
+    public static double MIN_ANGLE = -180.0, MAX_ANGLE = 180.0, MIN_POS = 0.045, MAX_POS = 0.96;///de tunat
     public static double goalX, goalY;
 
     public static double offset = 0.0;
