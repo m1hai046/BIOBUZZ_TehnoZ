@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Biobuzz.Sisteme;
 
 import com.bylazar.configurables.annotations.Configurable;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import dev.frozenmilk.dairy.cachinghardware.CachingDcMotorEx;
@@ -27,8 +28,8 @@ public class IntakeTransfer {
         motorIntake = new CachingDcMotorEx(hardwareMap.get(DcMotorEx.class, "MINT"));
         motorTransfer = new CachingDcMotorEx(hardwareMap.get(DcMotorEx.class, "MTR"));
 
-        motorIntake.setDirection(CachingDcMotorEx.Direction.FORWARD);
-        motorTransfer.setDirection(CachingDcMotorEx.Direction.REVERSE);
+        motorIntake.setDirection(CachingDcMotorEx.Direction.REVERSE);
+        motorTransfer.setDirection(CachingDcMotorEx.Direction.FORWARD);
     }
 
     public void Collect(){

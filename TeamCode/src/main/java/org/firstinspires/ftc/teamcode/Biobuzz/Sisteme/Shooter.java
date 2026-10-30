@@ -12,6 +12,7 @@ import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Biobuzz.Useful.Globals;
+import org.firstinspires.ftc.teamcode.Biobuzz.Useful.TeleOp_Methods;
 
 import dev.frozenmilk.dairy.cachinghardware.CachingDcMotorEx;
 import dev.frozenmilk.dairy.cachinghardware.CachingServo;
@@ -30,13 +31,12 @@ import dev.frozenmilk.dairy.cachinghardware.CachingServo;
 public class Shooter {
 
     public VoltageSensor shooter_voltage;
-    public static double TARGET_VELOCITY, HOOD_ANGLE, gateOpen = 0.3, gateClosed = 0.0;
-    public static double kP = 0.00065 , kV = 0.000385, kS = 0.05, nominalVoltage = 12.0 , error;
-    public static double FAILSAFE_VELOCITY = 1500.0, FAILSAFE_ANGLE = 0.5, TARGET_STOPPED = 0.0;
+    public static double TARGET_VELOCITY, HOOD_ANGLE, gateOpen = 0.2, gateClosed = 0.54;
+    public static double kP = 0.014 , kV = 0.00037, kS = 0.1, nominalVoltage = 12.0 , error;
+    public static double FAILSAFE_VELOCITY = 1520.0, FAILSAFE_ANGLE = 0.2  , TARGET_STOPPED = 0.0;
     public boolean running = false, shooting = false;
     public static double goalX, goalY;
 
-    public static double X_OFFSET_GAIN = 0.15, MAX_X_OFFSET = 0.0;
     public static double minHoodAngle = 0.0, maxHoodAngle = 0.65, minShooterRpm = 1850.0, maxShooterRpm = 2000.0;
     public static double rpmOffset = 0.0;
 
@@ -108,7 +108,7 @@ public class Shooter {
             }
         }
 
-        double hiveAngleOffset = xGoalOffset(goalX, x, goalY, y);
+        double hiveAngleOffset = TeleOp_Methods.xGoalOffset(goalX, x, goalY, y);
         distance_from_goal = Math.hypot(goalX - x + hiveAngleOffset, goalY - y);
 
         if (!Globals.FAILSAFE_MODE) {
@@ -220,7 +220,7 @@ public class Shooter {
         }
 
 
-        double hiveAngleOffset = xGoalOffset(goalX, predX, goalY, predY);
+        double hiveAngleOffset = TeleOp_Methods.xGoalOffset(goalX, predX, goalY, predY);
         distance_from_goal = Math.hypot(goalX - predX + hiveAngleOffset, goalY - predY);
 
         if (!Globals.FAILSAFE_MODE) {
@@ -242,7 +242,6 @@ public class Shooter {
             double voltageScaling = nominalVoltage / shooter_voltage.getVoltage();
 
 
-
             double proportional = (kP * error);
             double feedforward = (kV * TARGET_VELOCITY) + kS;
 
@@ -254,7 +253,6 @@ public class Shooter {
             motor_shooter_2.setPower(pow);
             hood.setPosition(HOOD_ANGLE);
         }
-
 
 
         switch (state) {
@@ -284,9 +282,7 @@ public class Shooter {
                 gateClosed();
                 break;
         }
-
     }
-
 
     public enum State{
         RUNNING,
@@ -311,15 +307,6 @@ public class Shooter {
         return motor_shooter_2.getVelocity();
     }
 
-//    public double optimalAngle(double dist){
-//        double angle = -0.00000125 * Math.pow(dist, 4)
-//                +  0.000314815 * Math.pow(dist, 3)
-//                -  0.0291042 * Math.pow(dist, 2)
-//                +  1.18102 * dist
-//                -  17.29939;
-//        return Utils.clamp(angle, minHoodAngle, maxHoodAngle);
-//    }
-
     public double optimalAngle(double dist){
         double angle = -0.00000145833 * Math.pow(dist, 4)
                 +  0.000291667   * Math.pow(dist, 3)
@@ -329,17 +316,6 @@ public class Shooter {
         return Utils.clamp(angle, minHoodAngle, maxHoodAngle);
     }
 
-
-
-//    public double optimalRpm(double dist){
-//        double rpm = -0.0000416667 * Math.pow(dist, 4)
-//                +  0.00703704   * Math.pow(dist, 3)
-//                -  0.30625      * Math.pow(dist, 2)
-//                +  2.0463       * dist
-//                +  1713.23785;
-//        return Utils.clamp(rpm, minShooterRpm, maxShooterRpm);
-//    }
-
     public double optimalRpm(double dist){
         double rpm = 0.000541667 * Math.pow(dist, 4)
                 - 0.13        * Math.pow(dist, 3)
@@ -348,26 +324,6 @@ public class Shooter {
                 + 7748.04688;
         return Utils.clamp(rpm, minShooterRpm, maxShooterRpm);
     }
-
-
-    public double xGoalOffset(double goalX, double robotX, double goalY, double robotY){
-        double lateral = goalX - robotX;
-        double forward = goalY - robotY;
-        double hypot = Math.hypot(lateral, forward);
-
-        if (hypot < 0.01) return 0;
-
-        double sinVal = lateral / hypot;
-        if (robotY >70.7)
-        {
-            return Utils.clamp(sinVal * X_OFFSET_GAIN, MAX_X_OFFSET, -MAX_X_OFFSET);
-
-        }
-        else {
-            return Utils.clamp(sinVal * X_OFFSET_GAIN, -MAX_X_OFFSET, MAX_X_OFFSET);
-        }
-    }
-
 
 
 }

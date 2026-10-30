@@ -51,7 +51,6 @@ public class RED_TeleOp_pedro_FC extends LinearOpMode {
 
         telemetry.setMsTransmissionInterval(11);
 
-
         intakeTransfer = new IntakeTransfer(hardwareMap);
         turret = new Turret(hardwareMap);
         shooter = new Shooter(hardwareMap);
@@ -109,7 +108,6 @@ public class RED_TeleOp_pedro_FC extends LinearOpMode {
                     currentPose.y(),
                     currentPose.heading()
             );
-
 
 
             teleOp_Methods.handleControls(currentG1, previousG1, currentG2, previousG2);

@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.Biobuzz.Useful;
 import com.bylazar.configurables.annotations.Configurable;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.math.Pose;
+import com.pedropathing.utils.Utils;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -16,18 +17,20 @@ public class TeleOp_Methods {
     public RobotState robotState;
     private static final double trigger_threshold = 0.3;
     public double SHOOT_DURATION_MS = 800.0;
-    public IntakeTransfer intakeTransfer;
-    public Shooter shooter;
-    public Follower follower;
+    public static double X_OFFSET_GAIN = 0.15, MAX_X_OFFSET = 0.0;
 
-    public Pose startingPose;
+    public IntakeTransfer M_intakeTransfer;
+    public Shooter M_shooter;
+    public Follower M_follower;
+
+    public Pose M_startingPose;
 
     public TeleOp_Methods(IntakeTransfer intakeTransfer, Shooter shooter,
                           Follower follower, Pose startingPose) {
-        this.intakeTransfer = intakeTransfer;
-        this.shooter = shooter;
-        this.follower = follower;
-        this.startingPose = startingPose;
+        M_intakeTransfer = intakeTransfer;
+        M_shooter = shooter;
+        M_follower = follower;
+        M_startingPose = startingPose;
     }
 
     public void handleControls(Gamepad current, Gamepad previous, Gamepad current2, Gamepad previous2){
@@ -49,12 +52,12 @@ public class TeleOp_Methods {
                 && previous.right_trigger <= trigger_threshold) {
             if (robotState != RobotState.SHOOT) {
                 robotState = RobotState.SHOOT;
-                shooter.state = Shooter.State.SHOOTING;
+                M_shooter.state = Shooter.State.SHOOTING;
             }
         }
 
         if (current.dpad_down && !previous.dpad_down) {
-            follower.setPose(startingPose);
+            M_follower.setPose(M_startingPose);
             Turret.offset = 0;
             Shooter.rpmOffset = 0;
         }
@@ -81,27 +84,48 @@ public class TeleOp_Methods {
         switch (robotState){
 
             case DEFAULT:
-                shooter.state = Shooter.State.RUNNING;
-                intakeTransfer.Off();
+                M_shooter.state = Shooter.State.RUNNING;
+                M_intakeTransfer.Off();
                 break;
 
             case INTAKE:
-                intakeTransfer.Collect();
+                M_intakeTransfer.Collect();
                 break;
 
             case REVERSE:
-                shooter.state = Shooter.State.RUNNING;
-                intakeTransfer.Reverse();
+                M_shooter.state = Shooter.State.RUNNING;
+                M_intakeTransfer.Reverse();
                 break;
 
             case SHOOT:
-                intakeTransfer.Shoot();
-                if (shooter.state == Shooter.State.RUNNING) {
+                M_intakeTransfer.Shoot();
+                if (M_shooter.state == Shooter.State.RUNNING) {
                     robotState = RobotState.INTAKE;
                 }
                 break;
         }
     }
+
+
+    ///folosita la shooter si turela
+    public static double xGoalOffset(double goalX, double robotX, double goalY, double robotY){
+        double lateral = goalX - robotX;
+        double forward = goalY - robotY;
+        double hypot = Math.hypot(lateral, forward);
+
+        if (hypot < 0.01) return 0;
+
+        double sinVal = lateral / hypot;
+        if (robotY >70.7)
+        {
+            return Utils.clamp(sinVal * X_OFFSET_GAIN, MAX_X_OFFSET, -MAX_X_OFFSET);
+
+        }
+        else {
+            return Utils.clamp(sinVal * X_OFFSET_GAIN, -MAX_X_OFFSET, MAX_X_OFFSET);
+        }
+    }
+
 
 
     public void update_telemetry(Telemetry telemetry, ElapsedTime loops){
@@ -110,19 +134,19 @@ public class TeleOp_Methods {
         telemetry.addData("  failsafe", Globals.FAILSAFE_MODE);
 
         telemetry.addLine("-------- SHOOTER --------");
-        telemetry.addData(" vel shooter ", shooter.motor_shooter.getVelocity());
+        telemetry.addData(" vel shooter ", M_shooter.motor_shooter.getVelocity());
         telemetry.addData(" RPM target", "%.1f", Shooter.TARGET_VELOCITY);
         telemetry.addData(" hood angle", Shooter.HOOD_ANGLE);
         telemetry.addData("  goalX", Shooter.goalX);
         telemetry.addData("  goalY", Shooter.goalY);
-        telemetry.addData("  voltaj_shooter", shooter.shooter_voltage.getVoltage());
+        telemetry.addData("  voltaj_shooter", M_shooter.shooter_voltage.getVoltage());
 
 //        telemetry.addData(" gate pos", Shooter.);
 
 
         if (robotState == TeleOp_Methods.RobotState.SHOOT)
             telemetry.addData("  Shoot timer", "%.0f / %.0f ms",
-                    shooter.shootTimer.milliseconds(), SHOOT_DURATION_MS);
+                    M_shooter.shootTimer.milliseconds(), SHOOT_DURATION_MS);
 
         telemetry.addLine("-------- TURELA --------");
         telemetry.addData("  Unghi target", "%.1f°", Turret.target_position);
@@ -133,19 +157,19 @@ public class TeleOp_Methods {
 
 
         telemetry.addLine("-------- INTAKE/TRANSFER --------");
-        telemetry.addData("  Intake power", "%.2f", intakeTransfer.motorIntake.getPower());
-        telemetry.addData("  Transfer power", "%.2f", intakeTransfer.motorTransfer.getPower());
+        telemetry.addData("  Intake power", "%.2f", M_intakeTransfer.motorIntake.getPower());
+        telemetry.addData("  Transfer power", "%.2f", M_intakeTransfer.motorTransfer.getPower());
 
         telemetry.addData("  powIntake", IntakeTransfer.powIntake);
         telemetry.addData("  powTansferCollect", IntakeTransfer.powTransferCollect);
         telemetry.addData("  powTransferShoot", IntakeTransfer.powTransferShoot);
 
         telemetry.addLine("-------- LOCALIZARE --------");
-        telemetry.addData("  Pose X", "%.1f", follower.pose().x());
-        telemetry.addData("  Pose Y", "%.1f", follower.pose().y());
-        telemetry.addData("  Heading", "%.1f°", Math.toDegrees(follower.pose().heading()));
+        telemetry.addData("  Pose X", "%.1f", M_follower.pose().x());
+        telemetry.addData("  Pose Y", "%.1f", M_follower.pose().y());
+        telemetry.addData("  Heading", "%.1f°", Math.toDegrees(M_follower.pose().heading()));
 
-        telemetry.addData("distance from goal ", shooter.distance_from_goal);
+        telemetry.addData("distance from goal ", M_shooter.distance_from_goal);
 
 
         telemetry.addLine("-------- PROFILING --------");
