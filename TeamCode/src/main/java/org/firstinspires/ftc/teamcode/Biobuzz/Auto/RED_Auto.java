@@ -117,7 +117,7 @@ public class RED_Auto extends LinearOpMode {
                 case 0:
                 if (!follower.following()){
                     intakeTransfer.Off();
-                    shooter.state = Shooter.State.STOPPED;z
+                    shooter.state = Shooter.State.STOPPED;
                     setPathState(1);
                 }
                 break;
