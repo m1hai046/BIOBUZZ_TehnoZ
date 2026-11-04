@@ -5,21 +5,27 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
+
 import dev.frozenmilk.dairy.cachinghardware.CachingDcMotorEx;
 
 @Configurable
 public class IntakeTransfer {
 
-    public CachingDcMotorEx motorIntake, motorTransfer;
+    public static CachingDcMotorEx motorIntake, motorTransfer;
 
     /// VARIABILE INTAKE
     public static double powIntake = 0.8;
     public static double powReverse = -1;
     public static double powOff = 0;
 
+    public static boolean reset = true;
+    public static int confirmare = 0;
+    public static double thresholdAmps = 5;
+
 
     /// VARIABILE TRANSFER
-    public static double powTransferCollect = 0.4;
+    public static double powTransferCollect = 0.7;
     /// gate  inchis
     public static double powTransferShoot = 0.95;   ///gate deschis
 
@@ -47,5 +53,25 @@ public class IntakeTransfer {
     public void Shoot(){
         motorIntake.setPower(powIntake);
         motorTransfer.setPower(powTransferShoot);
+    }
+
+
+    public static double getAmps() {
+        return motorIntake.getCurrent(CurrentUnit.AMPS);
+    }
+
+    /// de terminat
+    public static boolean hasArtifact() {
+        if (!reset) {
+            confirmare = 0;
+            return false;
+        } else if (reset) {
+            if (getAmps() > thresholdAmps) {
+                confirmare++;
+            } else {
+                confirmare = 0;
+            }
+        }
+        return confirmare > 4;
     }
 }

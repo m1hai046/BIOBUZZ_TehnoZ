@@ -30,11 +30,9 @@ public class Shooter {
 
     public VoltageSensor shooter_voltage;
     public static double TARGET_VELOCITY, HOOD_ANGLE, gateOpen = 0.2, gateClosed = 0.54;
-    //public static double kP = 0.014 , kV = 0.00037, kS = 0.1, nominalVoltage = 12.0 , error;
-    //public static double kP = 0.01 , kV = 0.0004, kS = 0.2, nominalVoltage = 12.0 , error;
-    public static double kP = 0.0 , kV = 0.0, kS = 0.0, nominalVoltage = 12.0 , error;
+    public static double kP = 0.008 , kV = 0.00028, kS = 0.2, nominalVoltage = 12.0 , error;
 
-    public static double FAILSAFE_VELOCITY = 1520.0, FAILSAFE_ANGLE = 0.2  , TARGET_STOPPED = 0.0;
+    public static double FAILSAFE_VELOCITY = 1475.0, FAILSAFE_ANGLE = 0.19  , TARGET_STOPPED = 0.0;
     public boolean running = false, shooting = false;
     public static double goalX, goalY;
 
