@@ -36,7 +36,7 @@ public class Shooter {
     public boolean running = false, shooting = false;
     public static double goalX, goalY;
 
-    public static double minHoodAngle = 0.0, maxHoodAngle = 0.65, minShooterRpm = 1850.0, maxShooterRpm = 2000.0;
+    public static double minHoodAngle = 0.2, maxHoodAngle = 0.1, minShooterRpm = 1440.0, maxShooterRpm = 1580.0;
     public static double rpmOffset = 0.0;
 
     public State state;
@@ -306,21 +306,37 @@ public class Shooter {
         return motor_shooter_2.getVelocity();
     }
 
-    public double optimalAngle(double dist){
-        double angle = -0.00000145833 * Math.pow(dist, 4)
-                +  0.000291667   * Math.pow(dist, 3)
-                -  0.0210104     * Math.pow(dist, 2)
-                +  0.662708      * dist
-                -  7.77383;
+//    public double optimalAngle(double dist){
+//        double angle = -0.00000145833 * Math.pow(dist, 4)
+//                +  0.000291667   * Math.pow(dist, 3)
+//                -  0.0210104     * Math.pow(dist, 2)
+//                +  0.662708      * dist
+//                -  7.77383;
+//        return Utils.clamp(angle, minHoodAngle, maxHoodAngle);
+//    }
+//
+//    public double optimalRpm(double dist){
+//        double rpm = 0.000541667 * Math.pow(dist, 4)
+//                - 0.13        * Math.pow(dist, 3)
+//                + 11.46458    * Math.pow(dist, 2)
+//                - 433.75      * dist
+//                + 7748.04688;
+//        return Utils.clamp(rpm, minShooterRpm, maxShooterRpm);
+//    }
+
+    public double optimalAngle(double dist) {
+        double angle = -0.0000183333 * Math.pow(dist, 3)
+                + 0.0035 * Math.pow(dist, 2)
+                - 0.215167 * dist
+                + 4.4;
         return Utils.clamp(angle, minHoodAngle, maxHoodAngle);
     }
 
-    public double optimalRpm(double dist){
-        double rpm = 0.000541667 * Math.pow(dist, 4)
-                - 0.13        * Math.pow(dist, 3)
-                + 11.46458    * Math.pow(dist, 2)
-                - 433.75      * dist
-                + 7748.04688;
+    public double optimalRpm(double dist) {
+        double rpm = 0.00333333 * Math.pow(dist, 3)
+                - 0.5 * Math.pow(dist, 2)
+                + 26.66667 * dist
+                + 940;
         return Utils.clamp(rpm, minShooterRpm, maxShooterRpm);
     }
 
