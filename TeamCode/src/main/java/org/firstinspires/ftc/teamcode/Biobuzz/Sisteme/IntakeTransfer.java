@@ -5,6 +5,8 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
+
 import dev.frozenmilk.dairy.cachinghardware.CachingDcMotorEx;
 import dev.frozenmilk.dairy.cachinghardware.CachingServo;
 
@@ -15,6 +17,10 @@ public class IntakeTransfer {
     public CachingServo rampa;
 
     public boolean flower = false;
+
+    public static boolean reset = true;
+    public static int confirmare = 0;
+    public static double thresholdAmps = 5;
 
     /// POS RAMPA
 
@@ -69,5 +75,24 @@ public class IntakeTransfer {
     public void RampaJos(){
         rampa.setPosition(rampaJos);
         flower = false;
+    }
+
+
+    public double getAmps() {
+        return motorIntake.getCurrent(CurrentUnit.AMPS);
+    }
+
+    public boolean hasArtifact() {
+        if (!reset) {
+            confirmare = 0;
+            return false;
+        } else if (reset) {
+            if (getAmps() > thresholdAmps) {
+                confirmare++;
+            } else {
+                confirmare = 0;
+            }
+        }
+        return confirmare > 4;
     }
 }

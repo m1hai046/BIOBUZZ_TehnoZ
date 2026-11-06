@@ -101,7 +101,7 @@ public class TeleOp_Methods {
 
             case INTAKE:
                 M_intakeTransfer.Collect();
-                if(IntakeTransfer.hasArtifact() == true){
+                if(M_intakeTransfer.hasArtifact()){
                     robotState = RobotState.DEFAULT;
                 }
 
@@ -174,10 +174,10 @@ public class TeleOp_Methods {
 
 
         telemetry.addLine("-------- INTAKE/TRANSFER --------");
-        telemetry.addData("  Intake power", "%.2f", IntakeTransfer.motorIntake.getPower());
-        telemetry.addData("  Transfer power", "%.2f", IntakeTransfer.motorTransfer.getPower());
-        telemetry.addData("  has artifact", IntakeTransfer.hasArtifact());
-        telemetry.addData("  amps", IntakeTransfer.getAmps());
+        telemetry.addData("  Intake power", "%.2f", M_intakeTransfer.motorIntake.getPower());
+        telemetry.addData("  Transfer power", "%.2f", M_intakeTransfer.motorTransfer.getPower());
+        telemetry.addData("  has artifact", M_intakeTransfer.hasArtifact());
+        telemetry.addData("  amps", M_intakeTransfer.getAmps());
 
         telemetry.addData("  powIntake", IntakeTransfer.powIntake);
         telemetry.addData("  powTransferCollect", IntakeTransfer.powTransferCollect);
