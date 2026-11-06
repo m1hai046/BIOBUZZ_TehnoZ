@@ -131,15 +131,17 @@ public class RED_Auto_V2 extends LinearOpMode {
         switch(pathState){
 
             case 0:
-                if (!follower.following()){
+                if (!follower.following()){//da shoot la preload
+                    shooter.state = Shooter.State.RUNNING;
                     intakeTransfer.Off();
-                    shooter.state = Shooter.State.STOPPED;
+                    shooter.state = Shooter.State.SHOOTING;
                     setPathState(1);
                 }
                 break;
 
             case 1:
                 if (!follower.following()){
+                    intakeTransfer.Collect();
                     follower.follow(collectGarden());
                     setPathState(2);
                 }
