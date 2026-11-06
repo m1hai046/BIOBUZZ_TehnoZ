@@ -30,7 +30,7 @@ public class Shooter {
 
     public VoltageSensor shooter_voltage;
     public static double TARGET_VELOCITY, HOOD_ANGLE, gateOpen = 0.2, gateClosed = 0.54;
-    public static double kP = 0.008 , kV = 0.00028, kS = 0.2, nominalVoltage = 12.0 , error;
+    public static double kP = 0.008 , kV = 0.00028, kS = 0.2, nominalVoltage = 12.0 , error, SHOOT_TIME = 800;
 
     public static double FAILSAFE_VELOCITY = 1475.0, FAILSAFE_ANGLE = 0.19  , TARGET_STOPPED = 0.0;
     public boolean running = false, shooting = false;
@@ -267,7 +267,7 @@ public class Shooter {
                 running = true;
                 if (Math.abs(error) <= 100) {
                     gateOpen();
-                    if (shootTimer.milliseconds() > 800) {///trb pus timer in teleop cand apesi pe buton sa isi dea reset
+                    if (shootTimer.milliseconds() > SHOOT_TIME) {///trb pus timer in teleop cand apesi pe buton sa isi dea reset
                         state = State.RUNNING;
                     }
                 }

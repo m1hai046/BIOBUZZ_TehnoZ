@@ -21,13 +21,13 @@ public class IntakeTransfer {
 
     public static boolean reset = true;
     public static int confirmare = 0;
-    public static double thresholdAmps = 5;
+    public static double thresholdAmps = 6;
 
 
     /// VARIABILE TRANSFER
     public static double powTransferCollect = 0.7;
     /// gate  inchis
-    public static double powTransferShoot = 0.95;   ///gate deschis
+    public static double powTransferShoot = 0.85;   ///gate deschis
 
 
     public IntakeTransfer(HardwareMap hardwareMap){

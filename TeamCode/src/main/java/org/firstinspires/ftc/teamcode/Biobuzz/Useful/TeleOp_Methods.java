@@ -1,10 +1,13 @@
 package org.firstinspires.ftc.teamcode.Biobuzz.Useful;
 
 import com.bylazar.configurables.annotations.Configurable;
+import com.bylazar.telemetry.PanelsTelemetry;
+import com.bylazar.telemetry.TelemetryManager;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.math.Pose;
 import com.pedropathing.utils.Utils;
 import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -12,12 +15,14 @@ import org.firstinspires.ftc.teamcode.Biobuzz.Sisteme.IntakeTransfer;
 import org.firstinspires.ftc.teamcode.Biobuzz.Sisteme.Shooter;
 import org.firstinspires.ftc.teamcode.Biobuzz.Sisteme.Turret;
 
+
 @Configurable
 public class TeleOp_Methods {
     public RobotState robotState;
     private static final double trigger_threshold = 0.3;
-    public double SHOOT_DURATION_MS = 800.0;
     public static double X_OFFSET_GAIN = 0.15, MAX_X_OFFSET = 0.0;
+    final TelemetryManager telemetryM;
+    //VoltageSensor voltageSensor;
 
     public IntakeTransfer M_intakeTransfer;
     public Shooter M_shooter;
@@ -31,6 +36,8 @@ public class TeleOp_Methods {
         M_shooter = shooter;
         M_follower = follower;
         M_startingPose = startingPose;
+        telemetryM = PanelsTelemetry.INSTANCE.getTelemetry();
+        //voltageSensor =
     }
 
     public void handleControls(Gamepad current, Gamepad previous, Gamepad current2, Gamepad previous2){
@@ -90,7 +97,7 @@ public class TeleOp_Methods {
 
             case INTAKE:
                 M_intakeTransfer.Collect();
-                if(IntakeTransfer.hasArtifact() == true){
+                if(IntakeTransfer.hasArtifact()){
                     robotState = RobotState.DEFAULT;
                 }
 
@@ -151,7 +158,7 @@ public class TeleOp_Methods {
 
         if (robotState == TeleOp_Methods.RobotState.SHOOT)
             telemetry.addData("  Shoot timer", "%.0f / %.0f ms",
-                    M_shooter.shootTimer.milliseconds(), SHOOT_DURATION_MS);
+                    M_shooter.shootTimer.milliseconds(), Shooter.SHOOT_TIME);
 
         telemetry.addLine("-------- TURELA --------");
         telemetry.addData(" Unghi target", "%.1f°", Turret.target_position);
@@ -178,24 +185,30 @@ public class TeleOp_Methods {
 
         telemetry.addData("distance from goal ", M_shooter.distance_from_goal);
 
+        //double batteryVoltage = voltageSensor.getVoltage();
 
         telemetry.addLine("-------- PROFILING --------");
         telemetry.addData("loop time ", loops.milliseconds());
+        //telemetry.addData("batteryVoltage ", batteryVoltage);
 
 
-        //        telemetryM.debug("--- Shooter ---");
-//        telemetryM.addData("motor1RPM",      shooter.motor_shooter.getVelocity());
-//        telemetryM.addData("motor2RPM",      shooter.motor_shooter_2.getVelocity());
-//        telemetryM.addData("RPM",            shooter.getRpm(shooter.motor_shooter.getVelocity()));
-//        telemetryM.addData("targetVelocity", shooter.TARGET_VELOCITY);
-//        telemetryM.addData("Velocity",       shooter.motor_shooter.getVelocity());
+                telemetryM.debug("--- Shooter ---");
+        telemetryM.addData("motor1RPM",      M_shooter.motor_shooter.getVelocity());
+        telemetryM.addData("motor2RPM",      M_shooter.motor_shooter_2.getVelocity());
+        //telemetryM.addData("RPM",            Shooter.getRpm(M_shooter.motor_shooter.getVelocity()));
+        telemetryM.addData("targetVelocity", Shooter.TARGET_VELOCITY);
+        telemetryM.addData("Velocity",       M_shooter.motor_shooter.getVelocity());
 
-//        telemetryM.addData("graph.shooter.target", shooter.TARGET_VELOCITY);
-//        telemetryM.addData("graph.shooter.actual", shooter.motor_shooter.getVelocity());
-//        telemetryM.addData("graph.shooter.pwr1",   shooter.motor_shooter.getPower());
-//        telemetryM.addData("graph.shooter.pwr2",   shooter.motor_shooter_2.getPower());
+        telemetryM.addData("graph.shooter.target", Shooter.TARGET_VELOCITY);
+        telemetryM.addData("graph.shooter.actual", M_shooter.motor_shooter.getVelocity());
+        telemetryM.addData("graph.shooter.pwr1",   M_shooter.motor_shooter.getPower());
+        telemetryM.addData("graph.shooter.pwr2",   M_shooter.motor_shooter_2.getPower());
 
-//        telemetryM.update(telemetry);
+        //telemetryM.addData("graph.battery",  batteryVoltage);
+
+        //telemetryM.addData("batteryVoltage ", batteryVoltage);
+
+        telemetryM.update(telemetry);
         telemetry.update();
     }
 

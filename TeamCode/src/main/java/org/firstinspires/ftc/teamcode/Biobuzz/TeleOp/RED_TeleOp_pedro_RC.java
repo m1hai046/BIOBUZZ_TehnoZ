@@ -33,7 +33,7 @@ public class RED_TeleOp_pedro_RC extends LinearOpMode {
     public Follower follower;
     public TeleOp_Methods teleOp_Methods;
 
-    public static Pose startingPose = new Pose(9, 9, Math.toRadians(0));///de vazut
+    public static Pose startingPose = new Pose(9, 9, Math.toRadians(270));///de vazut
 
 
     public List<LynxModule> allHubs;
