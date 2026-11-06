@@ -114,7 +114,7 @@ public class RED_Auto extends LinearOpMode {
     public void autonomousPathUpdate(){
         switch(pathState){
 
-                case 0:
+            case 0:
                 if (!follower.following()){
                     intakeTransfer.Off();
                     shooter.state = Shooter.State.STOPPED;
@@ -122,42 +122,42 @@ public class RED_Auto extends LinearOpMode {
                 }
                 break;
 
-                case 1:
+            case 1:
                 if (!follower.following()){
                     follower.follow(path1());
                     setPathState(2);
                 }
                 break;
 
-                case 2:
+            case 2:
                 if (!follower.following()){
                     follower.follow(path2());
                     setPathState(3);
                 }
                 break;
 
-                case 3:
+            case 3:
                 if (!follower.following()){
                     follower.follow(path3());
                     setPathState(4);
                 }
                 break;
 
-                case 4:
+            case 4:
                 if (!follower.following()){
                     follower.follow(path4());
                     setPathState(5);
                 }
                 break;
 
-                case 5:
+            case 5:
                 if (!follower.following()){
                     follower.follow(path5());
                     setPathState(6);
                 }
                 break;
 
-                case 6:
+            case 6:
                 if (!follower.following()){
                     follower.follow(path6());
                     setPathState(-1);
