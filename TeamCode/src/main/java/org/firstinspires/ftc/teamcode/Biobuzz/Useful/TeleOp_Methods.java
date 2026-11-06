@@ -101,6 +101,10 @@ public class TeleOp_Methods {
 
             case INTAKE:
                 M_intakeTransfer.Collect();
+                if(IntakeTransfer.hasArtifact() == true){
+                    robotState = RobotState.DEFAULT;
+                }
+
                 break;
 
             case REVERSE:
@@ -114,6 +118,7 @@ public class TeleOp_Methods {
                 if (M_shooter.state == Shooter.State.RUNNING) {
                     robotState = RobotState.INTAKE;
                 }
+                IntakeTransfer.confirmare = 0;
                 break;
         }
     }
@@ -142,16 +147,16 @@ public class TeleOp_Methods {
 
     public void update_telemetry(Telemetry telemetry, ElapsedTime loops){
         telemetry.addLine("-------- ROBOT STATE --------");
-        telemetry.addData("  State", robotState.name());
-        telemetry.addData("  failsafe", Globals.FAILSAFE_MODE);
+        telemetry.addData(" State", robotState.name());
+        telemetry.addData(" failsafe", Globals.FAILSAFE_MODE);
 
         telemetry.addLine("-------- SHOOTER --------");
         telemetry.addData(" vel shooter ", M_shooter.motor_shooter.getVelocity());
         telemetry.addData(" RPM target", "%.1f", Shooter.TARGET_VELOCITY);
         telemetry.addData(" hood angle", Shooter.HOOD_ANGLE);
-        telemetry.addData("  goalX", Shooter.goalX);
-        telemetry.addData("  goalY", Shooter.goalY);
-        telemetry.addData("  voltaj_shooter", M_shooter.shooter_voltage.getVoltage());
+        telemetry.addData(" goalX", Shooter.goalX);
+        telemetry.addData(" goalY", Shooter.goalY);
+        telemetry.addData(" voltaj_shooter", M_shooter.shooter_voltage.getVoltage());
 
 //        telemetry.addData(" gate pos", Shooter.);
 
@@ -161,19 +166,21 @@ public class TeleOp_Methods {
                     M_shooter.shootTimer.milliseconds(), SHOOT_DURATION_MS);
 
         telemetry.addLine("-------- TURELA --------");
-        telemetry.addData("  Unghi target", "%.1f°", Turret.target_position);
-        telemetry.addData("  Rate", "%.1f°/s", Turret.target_angle);
-        telemetry.addData("  goalX", Turret.goalX);
-        telemetry.addData("  goalY", Turret.goalY);
+        telemetry.addData(" Unghi target", "%.1f°", Turret.target_position);
+        telemetry.addData(" Rate", "%.1f°/s", Turret.target_angle);
+        telemetry.addData(" goalX", Turret.goalX);
+        telemetry.addData(" goalY", Turret.goalY);
 
 
 
         telemetry.addLine("-------- INTAKE/TRANSFER --------");
-        telemetry.addData("  Intake power", "%.2f", M_intakeTransfer.motorIntake.getPower());
-        telemetry.addData("  Transfer power", "%.2f", M_intakeTransfer.motorTransfer.getPower());
+        telemetry.addData("  Intake power", "%.2f", IntakeTransfer.motorIntake.getPower());
+        telemetry.addData("  Transfer power", "%.2f", IntakeTransfer.motorTransfer.getPower());
+        telemetry.addData("  has artifact", IntakeTransfer.hasArtifact());
+        telemetry.addData("  amps", IntakeTransfer.getAmps());
 
         telemetry.addData("  powIntake", IntakeTransfer.powIntake);
-        telemetry.addData("  powTansferCollect", IntakeTransfer.powTransferCollect);
+        telemetry.addData("  powTransferCollect", IntakeTransfer.powTransferCollect);
         telemetry.addData("  powTransferShoot", IntakeTransfer.powTransferShoot);
 
         telemetry.addLine("-------- LOCALIZARE --------");

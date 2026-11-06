@@ -26,7 +26,6 @@ public class Turret {
 
     public CachingServo servo_left, servo_right;
 
-
     public Turret(HardwareMap hardwareMap){
         servo_left = new CachingServo(hardwareMap.get(Servo.class, "Turela_left"));
         servo_right = new CachingServo(hardwareMap.get(Servo.class, "Turela_right"));
