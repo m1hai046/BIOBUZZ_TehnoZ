@@ -56,7 +56,17 @@ public class TeleOp_Methods {
             }
         }
 
-        if (current.dpad_down && !previous.dpad_down) {
+        if (current.left_trigger > trigger_threshold
+                && previous.left_trigger <= trigger_threshold) {
+            if (M_intakeTransfer.flower) {
+                M_intakeTransfer.RampaSus();
+            }
+            else{
+                M_intakeTransfer.RampaJos();
+            }
+        }
+
+            if (current.dpad_down && !previous.dpad_down) {
             M_follower.setPose(M_startingPose);
             Turret.offset = 0;
             Shooter.rpmOffset = 0;
@@ -86,6 +96,7 @@ public class TeleOp_Methods {
             case DEFAULT:
                 M_shooter.state = Shooter.State.RUNNING;
                 M_intakeTransfer.Off();
+                M_intakeTransfer.RampaSus();
                 break;
 
             case INTAKE:
@@ -95,6 +106,7 @@ public class TeleOp_Methods {
             case REVERSE:
                 M_shooter.state = Shooter.State.RUNNING;
                 M_intakeTransfer.Reverse();
+                M_intakeTransfer.RampaSus();
                 break;
 
             case SHOOT:

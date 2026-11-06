@@ -6,11 +6,20 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import dev.frozenmilk.dairy.cachinghardware.CachingDcMotorEx;
+import dev.frozenmilk.dairy.cachinghardware.CachingServo;
 
 @Configurable
 public class IntakeTransfer {
 
     public CachingDcMotorEx motorIntake, motorTransfer;
+    public CachingServo rampa;
+
+    public boolean flower = false;
+
+    /// POS RAMPA
+
+    public static double rampaJos = 0.3;
+    public static double rampaSus = 0.7;
 
     /// VARIABILE INTAKE
     public static double powIntake = 0.8;
@@ -27,6 +36,8 @@ public class IntakeTransfer {
     public IntakeTransfer(HardwareMap hardwareMap){
         motorIntake = new CachingDcMotorEx(hardwareMap.get(DcMotorEx.class, "MINT"));
         motorTransfer = new CachingDcMotorEx(hardwareMap.get(DcMotorEx.class, "MTR"));
+        rampa = new CachingServo(hardwareMap.get(CachingServo.class, "Rampa"));
+
 
         motorIntake.setDirection(CachingDcMotorEx.Direction.REVERSE);
         motorTransfer.setDirection(CachingDcMotorEx.Direction.FORWARD);
@@ -36,16 +47,27 @@ public class IntakeTransfer {
         motorIntake.setPower(powIntake);
         motorTransfer.setPower(powTransferCollect);
     }
+
     public void Off(){
         motorIntake.setPower(powOff);
         motorTransfer.setPower(powOff);
+        rampa.setPosition(rampaSus);
     }
     public void Reverse(){
         motorIntake.setPower(powReverse);
         motorTransfer.setPower(powReverse);
+        rampa.setPosition(rampaSus);
     }
     public void Shoot(){
         motorIntake.setPower(powIntake);
         motorTransfer.setPower(powTransferShoot);
+    }
+    public void RampaSus(){
+        rampa.setPosition(rampaSus);
+        flower = true;
+    }
+    public void RampaJos(){
+        rampa.setPosition(rampaJos);
+        flower = false;
     }
 }
