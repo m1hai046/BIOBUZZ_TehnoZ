@@ -8,11 +8,19 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 
 import dev.frozenmilk.dairy.cachinghardware.CachingDcMotorEx;
+import dev.frozenmilk.dairy.cachinghardware.CachingServo;
 
 @Configurable
 public class IntakeTransfer {
 
     public static CachingDcMotorEx motorIntake, motorTransfer;
+    public CachingServo rampa;
+
+    public static double rampaJos = 0.3;
+    public static double rampaSus = 0.7;
+    public boolean flower = false;
+
+
 
     /// VARIABILE INTAKE
     public static double powIntake = 0.8;
@@ -53,6 +61,15 @@ public class IntakeTransfer {
     public void Shoot(){
         motorIntake.setPower(powIntake);
         motorTransfer.setPower(powTransferShoot);
+    }
+
+    public void RampaSus(){
+        rampa.setPosition(rampaSus);
+        flower = true;
+    }
+    public void RampaJos(){
+        rampa.setPosition(rampaJos);
+        flower = false;
     }
 
 
