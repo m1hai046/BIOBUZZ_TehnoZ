@@ -4,6 +4,7 @@ import com.bylazar.configurables.annotations.Configurable;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 
@@ -14,10 +15,10 @@ import dev.frozenmilk.dairy.cachinghardware.CachingServo;
 public class IntakeTransfer {
 
     public static CachingDcMotorEx motorIntake, motorTransfer;
-    public CachingServo rampa;
+    public CachingServo rampaLeft, rampaRight;
 
-    public static double rampaJos = 0.3;
-    public static double rampaSus = 0.7;
+    public static double rampaJos = 0.04;
+    public static double rampaSus = 0.73;
     public boolean flower = false;
 
 
@@ -41,6 +42,8 @@ public class IntakeTransfer {
     public IntakeTransfer(HardwareMap hardwareMap){
         motorIntake = new CachingDcMotorEx(hardwareMap.get(DcMotorEx.class, "MINT"));
         motorTransfer = new CachingDcMotorEx(hardwareMap.get(DcMotorEx.class, "MTR"));
+        rampaLeft = new CachingServo(hardwareMap.get(Servo.class, "RampaRight"));
+        rampaRight = new CachingServo(hardwareMap.get(Servo.class, "RampaLeft"));
 
         motorIntake.setDirection(CachingDcMotorEx.Direction.REVERSE);
         motorTransfer.setDirection(CachingDcMotorEx.Direction.FORWARD);
@@ -64,12 +67,14 @@ public class IntakeTransfer {
     }
 
     public void RampaSus(){
-        rampa.setPosition(rampaSus);
-        flower = true;
+        rampaRight.setPosition(rampaSus);
+        rampaLeft.setPosition(rampaSus);
+        flower = false;
     }
     public void RampaJos(){
-        rampa.setPosition(rampaJos);
-        flower = false;
+        rampaRight.setPosition(rampaJos);
+        rampaLeft.setPosition(rampaJos);
+        flower = true;
     }
 
 

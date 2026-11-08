@@ -81,29 +81,17 @@ public class RED_Auto extends LinearOpMode {
     }
 
     public Path path1() { return Paths.line(startPose, path1).linear(startPose, path1); }
-    public Path path2() {
-        return Paths.line(point2Start, point2).linear(point2Start, point2);
-    }
+    public Path path2() { return Paths.line(point2Start, point2).linear(point2Start, point2); }
 
-    public Path path3() {
-        return Paths.line(point3Start, point3).linear(point3Start, point3);
-    }
+    public Path path3() { return Paths.line(point3Start, point3).linear(point3Start, point3); }
 
-    public Path path4() {
-        return Paths.line(point4Start, point4).linear(point4Start, point4);
-    }
+    public Path path4() { return Paths.line(point4Start, point4).linear(point4Start, point4); }
 
-    public Path path5() {
-        return Paths.line(point5Start, point5).linear(point5Start, point5);
-    }
+    public Path path5() { return Paths.line(point5Start, point5).linear(point5Start, point5); }
 
-    public Path path6() {
-        return Paths.line(point6Start, point6).linear(point6Start, point6);
-    }
+    public Path path6() { return Paths.line(point6Start, point6).linear(point6Start, point6); }
 
-    public Path penStroke() {
-        return Paths.line(point6, penStroke).tangent();
-    }
+    public Path penStroke() { return Paths.line(point6, penStroke).tangent(); }
 
 
     public void setPathState(int n){

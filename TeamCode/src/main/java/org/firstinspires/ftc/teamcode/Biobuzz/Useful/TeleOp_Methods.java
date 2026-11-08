@@ -7,7 +7,6 @@ import com.pedropathing.follower.Follower;
 import com.pedropathing.math.Pose;
 import com.pedropathing.utils.Utils;
 import com.qualcomm.robotcore.hardware.Gamepad;
-import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -103,7 +102,6 @@ public class TeleOp_Methods {
             case DEFAULT:
                 M_shooter.state = Shooter.State.RUNNING;
                 M_intakeTransfer.Off();
-                M_intakeTransfer.RampaSus();
                 break;
 
             case INTAKE:
@@ -117,7 +115,6 @@ public class TeleOp_Methods {
             case REVERSE:
                 M_shooter.state = Shooter.State.RUNNING;
                 M_intakeTransfer.Reverse();
-                M_intakeTransfer.RampaSus();
                 break;
 
             case SHOOT:
@@ -184,7 +181,9 @@ public class TeleOp_Methods {
         telemetry.addData("  Intake power", "%.2f", IntakeTransfer.motorIntake.getPower());
         telemetry.addData("  Transfer power", "%.2f", IntakeTransfer.motorTransfer.getPower());
         telemetry.addData("  has artifact", IntakeTransfer.hasArtifact());
+        telemetry.addData("  flower", M_intakeTransfer.flower);
         telemetry.addData("  amps", IntakeTransfer.getAmps());
+
 
         telemetry.addData("  powIntake", IntakeTransfer.powIntake);
         telemetry.addData("  powTransferCollect", IntakeTransfer.powTransferCollect);

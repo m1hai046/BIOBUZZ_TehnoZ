@@ -6,6 +6,7 @@ import com.pedropathing.follower.Follower;
 import com.pedropathing.math.Pose;
 import com.pedropathing.math.Velocity;
 import com.qualcomm.hardware.lynx.LynxModule;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -22,8 +23,8 @@ import org.firstinspires.ftc.teamcode.pedro.Constants;
 import java.util.List;
 
 @Configurable
-@TeleOp (name = "RED_TeleOp_no_sotm_pedro_FC", group = "TeleOp")
-public class RED_TeleOp_pedro_FC extends LinearOpMode {
+@TeleOp (name = "RED_TeleOp_RC", group = "TeleOp")
+public class RED_TeleOp_RC extends LinearOpMode {
     public IntakeTransfer intakeTransfer;
     public Turret turret;
     public Shooter shooter;
@@ -50,6 +51,7 @@ public class RED_TeleOp_pedro_FC extends LinearOpMode {
         }
 
         telemetry.setMsTransmissionInterval(11);
+
 
         intakeTransfer = new IntakeTransfer(hardwareMap);
         turret = new Turret(hardwareMap);
@@ -110,8 +112,9 @@ public class RED_TeleOp_pedro_FC extends LinearOpMode {
             );
 
 
+
             teleOp_Methods.handleControls(currentG1, previousG1, currentG2, previousG2);
-            drive.pedro_FC(follower, gamepad1);
+            drive.pedro_RC(follower, gamepad1);
             teleOp_Methods.runStateMachine();
             teleOp_Methods.update_telemetry(telemetry, loops);
             loops.reset();

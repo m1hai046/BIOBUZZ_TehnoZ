@@ -6,6 +6,7 @@ import com.pedropathing.follower.Follower;
 import com.pedropathing.math.Pose;
 import com.pedropathing.math.Velocity;
 import com.qualcomm.hardware.lynx.LynxModule;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -22,8 +23,8 @@ import org.firstinspires.ftc.teamcode.pedro.Constants;
 import java.util.List;
 
 @Configurable
-@TeleOp (name = "RED_TeleOp_no_sotm_pedro_RC", group = "TeleOp")
-public class RED_TeleOp_pedro_RC extends LinearOpMode {
+@TeleOp (name = "BLUE_TeleOp_RC", group = "TeleOp")
+public class BLUE_TeleOp_RC extends LinearOpMode {
     public IntakeTransfer intakeTransfer;
     public Turret turret;
     public Shooter shooter;
@@ -33,7 +34,7 @@ public class RED_TeleOp_pedro_RC extends LinearOpMode {
     public Follower follower;
     public TeleOp_Methods teleOp_Methods;
 
-    public static Pose startingPose = new Pose(9, 9, Math.toRadians(270));///de vazut
+    public static Pose startingPose = new Pose(132.5, 9, Math.toRadians(90));///de vazut
 
 
     public List<LynxModule> allHubs;
@@ -41,7 +42,7 @@ public class RED_TeleOp_pedro_RC extends LinearOpMode {
     @Override
     public void runOpMode(){
 
-        Globals.alliance = Globals.Alliance.RED;
+        Globals.alliance = Globals.Alliance.BLUE;
         Globals.faze = Globals.FAZE.TELEOP;
 
         allHubs = hardwareMap.getAll(LynxModule.class);

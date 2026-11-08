@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Biobuzz.TeleOp;
+package org.firstinspires.ftc.teamcode.Biobuzz.TeleOp.Disabled;
 
 
 import com.bylazar.configurables.annotations.Configurable;

@@ -18,7 +18,7 @@ import org.firstinspires.ftc.teamcode.pedro.Constants;
 
 
 @Configurable
-@Autonomous(name="RED_Auto", group="Auto")
+@Autonomous(name="RED_Auto_V2", group="Auto")
 
 public class RED_Auto_V2 extends LinearOpMode {
 
