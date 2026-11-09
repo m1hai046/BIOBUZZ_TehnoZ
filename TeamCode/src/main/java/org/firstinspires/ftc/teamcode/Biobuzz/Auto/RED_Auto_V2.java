@@ -49,7 +49,6 @@ public class RED_Auto_V2 extends LinearOpMode {
     public Shooter shooter;
     public Turret turret;
     int pathState = 0;
-    public static double SHOOT_TIME = 800;
 
     public void runOpMode() throws InterruptedException {
 
@@ -150,7 +149,7 @@ public class RED_Auto_V2 extends LinearOpMode {
 
 
             case 1:
-                if (pathTimer.milliseconds() > SHOOT_TIME){
+                if (shooter.state != Shooter.State.SHOOTING){
                     intakeTransfer.Collect();
                     follower.follow(collectGarden());
                     setPathState(2);
@@ -173,7 +172,7 @@ public class RED_Auto_V2 extends LinearOpMode {
                 break;
 
             case 3:
-                if (pathTimer.milliseconds() > SHOOT_TIME){
+                if (shooter.state != Shooter.State.SHOOTING){
                     intakeTransfer.RampaJos();
                     follower.follow(collectshootFlower1());
                     setPathState(12);
@@ -188,7 +187,7 @@ public class RED_Auto_V2 extends LinearOpMode {
                 break;
 
             case 4:
-                if (pathTimer.milliseconds() > SHOOT_TIME){
+                if (shooter.state != Shooter.State.SHOOTING){
                     intakeTransfer.RampaSus();
                     intakeTransfer.Collect();
                     follower.follow(collectAlliance());
@@ -211,7 +210,7 @@ public class RED_Auto_V2 extends LinearOpMode {
                 break;
 
             case 6:
-                if (pathTimer.milliseconds() > SHOOT_TIME){
+                if (shooter.state != Shooter.State.SHOOTING){
                     intakeTransfer.RampaJos();
                     intakeTransfer.Collect();
                     follower.follow(collectFlower2());
