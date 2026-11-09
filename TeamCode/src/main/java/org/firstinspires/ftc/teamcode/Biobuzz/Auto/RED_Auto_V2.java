@@ -49,6 +49,7 @@ public class RED_Auto_V2 extends LinearOpMode {
     public Shooter shooter;
     public Turret turret;
     int pathState = 0;
+    public static double SHOOT_TIME = 800;
 
     public void runOpMode() throws InterruptedException {
 
@@ -67,10 +68,12 @@ public class RED_Auto_V2 extends LinearOpMode {
         waitForStart();
         pathTimer.reset();
 
+
         while (opModeIsActive() && !isStopRequested()) {
 
-
+            follower.update();
             Pose currentPose = follower.pose();
+
 
             shooter.update_shooter(
                     currentPose.x(),
@@ -82,7 +85,6 @@ public class RED_Auto_V2 extends LinearOpMode {
                     currentPose.y(),
                     currentPose.heading()
             );
-            follower.update();
 
             autonomousPathUpdate();
         }
@@ -133,36 +135,62 @@ public class RED_Auto_V2 extends LinearOpMode {
             case 0:
                 if (!follower.following()){//da shoot la preload
                     shooter.state = Shooter.State.RUNNING;
+                    intakeTransfer.RampaSus();
                     intakeTransfer.Off();
+                    setPathState(111);
+                }
+                break;
+
+            case 111:
+                if (!follower.following() && pathTimer.milliseconds() > 1000){
                     shooter.state = Shooter.State.SHOOTING;
                     setPathState(1);
                 }
                 break;
 
+
             case 1:
-                if (!follower.following()){
+                if (pathTimer.milliseconds() > SHOOT_TIME){
                     intakeTransfer.Collect();
                     follower.follow(collectGarden());
                     setPathState(2);
                 }
                 break;
 
+
             case 2:
-                if (!follower.following()){
+                if (!follower.following() && IntakeTransfer.hasArtifact()){
                     follower.follow(shootGarden());
+                    setPathState(11);
+                }
+                break;
+
+            case 11:
+                if (!follower.following()){
+                    shooter.state = Shooter.State.SHOOTING;
                     setPathState(3);
                 }
                 break;
 
             case 3:
-                if (!follower.following()){
+                if (pathTimer.milliseconds() > SHOOT_TIME){
+                    intakeTransfer.RampaJos();
                     follower.follow(collectshootFlower1());
+                    setPathState(12);
+                }
+                break;
+
+            case 12:
+                if (!follower.following() && IntakeTransfer.hasArtifact()){
+                    shooter.state = Shooter.State.SHOOTING;
                     setPathState(4);
                 }
                 break;
 
             case 4:
-                if (!follower.following()){
+                if (pathTimer.milliseconds() > SHOOT_TIME){
+                    intakeTransfer.RampaSus();
+                    intakeTransfer.Collect();
                     follower.follow(collectAlliance());
                     setPathState(5);
                 }
@@ -171,20 +199,37 @@ public class RED_Auto_V2 extends LinearOpMode {
             case 5:
                 if (!follower.following()){
                     follower.follow(shootAlliance());
+                    setPathState(13);
+                }
+                break;
+
+            case 13:
+                if (!follower.following() && IntakeTransfer.hasArtifact()){
+                    shooter.state = Shooter.State.SHOOTING;
                     setPathState(6);
                 }
                 break;
 
             case 6:
-                if (!follower.following()){
+                if (pathTimer.milliseconds() > SHOOT_TIME){
+                    intakeTransfer.RampaJos();
+                    intakeTransfer.Collect();
                     follower.follow(collectFlower2());
                     setPathState(7);
                 }
                 break;
 
+
             case 7:
                 if (!follower.following()){
                     follower.follow(shootFlower2());
+                    setPathState(14);
+                }
+                break;
+
+            case 14:
+                if (!follower.following()){
+                    shooter.state = Shooter.State.SHOOTING;
                     setPathState(-1);
                 }
                 break;

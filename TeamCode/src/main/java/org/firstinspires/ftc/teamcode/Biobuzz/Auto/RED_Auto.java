@@ -58,9 +58,10 @@ public class RED_Auto extends LinearOpMode {
         waitForStart();
         pathTimer.reset();
 
+
         while (opModeIsActive() && !isStopRequested()) {
 
-
+            follower.update();
             Pose currentPose = follower.pose();
 
             shooter.update_shooter(
@@ -73,7 +74,6 @@ public class RED_Auto extends LinearOpMode {
                     currentPose.y(),
                     currentPose.heading()
             );
-            follower.update();
 
             autonomousPathUpdate();
         }
