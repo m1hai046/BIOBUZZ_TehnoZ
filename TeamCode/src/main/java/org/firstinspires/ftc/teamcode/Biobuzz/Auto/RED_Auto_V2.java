@@ -158,7 +158,7 @@ public class RED_Auto_V2 extends LinearOpMode {
 
 
             case 2:
-                if (!follower.following() && IntakeTransfer.hasArtifact()){
+                if (!follower.following()){
                     follower.follow(shootGarden());
                     setPathState(11);
                 }
@@ -180,7 +180,7 @@ public class RED_Auto_V2 extends LinearOpMode {
                 break;
 
             case 12:
-                if (!follower.following() && IntakeTransfer.hasArtifact()){
+                if (!follower.following()){
                     shooter.state = Shooter.State.SHOOTING;
                     setPathState(4);
                 }
@@ -203,7 +203,7 @@ public class RED_Auto_V2 extends LinearOpMode {
                 break;
 
             case 13:
-                if (!follower.following() && IntakeTransfer.hasArtifact()){
+                if (!follower.following()){
                     shooter.state = Shooter.State.SHOOTING;
                     setPathState(6);
                 }
