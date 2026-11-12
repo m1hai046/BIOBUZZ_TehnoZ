@@ -17,7 +17,7 @@ public class IntakeTransfer {
     public CachingServo rampaLeft, rampaRight;
 
     public static double rampaJos = 0.04;
-    public static double rampaSus = 0.73;
+    public static double rampaSus = 0.79;
     public boolean flower = false;
 
 
@@ -33,9 +33,9 @@ public class IntakeTransfer {
 
 
     /// VARIABILE TRANSFER
-    public static double powTransferCollect = 0.7;
+    public static double powTransferCollect = 0.5;
     /// gate  inchis
-    public static double powTransferShoot = 0.85;   ///gate deschis
+    public static double powTransferShoot = 0.5;   ///gate deschis
 
 
     public IntakeTransfer(HardwareMap hardwareMap){
