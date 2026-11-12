@@ -137,14 +137,8 @@ public class TeleOp_Methods {
         if (hypot < 0.01) return 0;
 
         double sinVal = lateral / hypot;
-        if (robotY >70.7)
-        {
-            return Utils.clamp(sinVal * X_OFFSET_GAIN, MAX_X_OFFSET, -MAX_X_OFFSET);
 
-        }
-        else {
             return Utils.clamp(sinVal * X_OFFSET_GAIN, -MAX_X_OFFSET, MAX_X_OFFSET);
-        }
     }
 
 
