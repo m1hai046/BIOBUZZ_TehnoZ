@@ -19,7 +19,6 @@ import org.firstinspires.ftc.teamcode.Biobuzz.Sisteme.Turret;
 public class TeleOp_Methods {
     public RobotState robotState;
     private static final double trigger_threshold = 0.3;
-    public static double X_OFFSET_GAIN = 0.15, MAX_X_OFFSET = 0.0;
     final TelemetryManager telemetryM;
     //VoltageSensor voltageSensor;
 
@@ -129,17 +128,7 @@ public class TeleOp_Methods {
 
 
     ///folosita la shooter si turela
-    public static double xGoalOffset(double goalX, double robotX, double goalY, double robotY){
-        double lateral = goalX - robotX;
-        double forward = goalY - robotY;
-        double hypot = Math.hypot(lateral, forward);
 
-        if (hypot < 0.01) return 0;
-
-        double sinVal = lateral / hypot;
-
-            return Utils.clamp(sinVal * X_OFFSET_GAIN, -MAX_X_OFFSET, MAX_X_OFFSET);
-    }
 
 
 

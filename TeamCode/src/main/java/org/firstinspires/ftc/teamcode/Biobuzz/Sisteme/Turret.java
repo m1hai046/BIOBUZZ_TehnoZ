@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.Biobuzz.Sisteme;
 
 import com.bylazar.configurables.annotations.Configurable;
+import com.pedropathing.utils.Utils;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
@@ -24,6 +25,8 @@ public class Turret {
     public static double offset = 0.0;
 
     public CachingServo servo_left, servo_right;
+    public static double X_OFFSET_GAIN = 17.0, MAX_X_OFFSET = 60.0;
+
 
     public Turret(HardwareMap hardwareMap){
         servo_left = new CachingServo(hardwareMap.get(Servo.class, "Turela_left"));
@@ -57,7 +60,7 @@ public class Turret {
                 goalY = Globals.Y_GOAL_BLUE_INF;
             }
         }
-        double hiveAngleOffset = TeleOp_Methods.xGoalOffset(goalX, x, goalY, y);
+        double hiveAngleOffset = xGoalOffset(goalX, x, goalY, y);
 
 
         target_angle = Math.atan2(goalY - shooterWorldY, goalX - shooterWorldX + hiveAngleOffset);
@@ -109,7 +112,7 @@ public class Turret {
         }
 
 
-        double hiveAngleOffset = TeleOp_Methods.xGoalOffset(goalX, predX, goalY, predY);
+        double hiveAngleOffset = xGoalOffset(goalX, predX, goalY, predY);
         target_angle = Math.atan2(goalY - shooterWorldY, goalX - shooterWorldX + hiveAngleOffset);
         target_angle = AngleUnit.normalizeRadians(target_angle);
         heading = AngleUnit.normalizeRadians(heading);
@@ -123,17 +126,27 @@ public class Turret {
 
         target_position = Range.scale(relative_angle, MIN_ANGLE, MAX_ANGLE, MIN_POS, MAX_POS);
 
-
         if (!Globals.FAILSAFE_MODE)
             moveTo(target_position);
         else
             moveTo(failsafe_position);
-
     }
 
     public void moveTo(double x){
         servo_left.setPosition(x);
         servo_right.setPosition(x);
+    }
+
+    public static double xGoalOffset(double goalX, double robotX, double goalY, double robotY){
+        double lateral = robotX - goalX;
+        double forward = robotY - goalY;
+        double hypot = Math.hypot(lateral, forward);
+
+        if (hypot < 0.01) return 0;
+
+        double sinVal = lateral / hypot;
+
+        return Utils.clamp(sinVal * X_OFFSET_GAIN, -MAX_X_OFFSET, MAX_X_OFFSET);
     }
 
 }

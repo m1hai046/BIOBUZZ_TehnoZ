@@ -32,7 +32,7 @@ public class Shooter {
     public static double TARGET_VELOCITY, HOOD_ANGLE, gateOpen = 0.8, gateClosed = 0.54;
     public static double kP = 0.005 , kV = 0.00036, kS = 0.12, nominalVoltage = 12.0 , error, SHOOT_TIME = 800;
 
-    public static double FAILSAFE_VELOCITY = 1420.0, FAILSAFE_ANGLE = 0.19  , TARGET_STOPPED = 0.0;
+    public static double FAILSAFE_VELOCITY = 1420.0, FAILSAFE_ANGLE = 0.8  , TARGET_STOPPED = 0.0;
     public boolean running = false, shooting = false;
     public static double goalX, goalY;
 
@@ -47,6 +47,7 @@ public class Shooter {
 
     public CachingDcMotorEx motor_shooter, motor_shooter_2;
     public CachingServo gate, hood;
+    public static double X_OFFSET_GAIN = 0.15, MAX_X_OFFSET = 0.0;
 
     public Shooter(HardwareMap hardwareMap){
         motor_shooter = new CachingDcMotorEx(hardwareMap.get(DcMotorEx.class, "MSHT"));
@@ -107,12 +108,12 @@ public class Shooter {
             }
         }
 
-        double hiveAngleOffset = TeleOp_Methods.xGoalOffset(goalX, x, goalY, y);
+        double hiveAngleOffset = xGoalOffset(goalX, x, goalY, y);
         distance_from_goal = Math.hypot(goalX - x + hiveAngleOffset, goalY - y);
 
         if (!Globals.FAILSAFE_MODE) {
 
-            if (distance_from_goal <= 180 && distance_from_goal >= 40){
+            if (distance_from_goal <= 200 && distance_from_goal >= 10){
                 TARGET_VELOCITY = optimalRpm(distance_from_goal) + rpmOffset;
                 HOOD_ANGLE = optimalAngle(distance_from_goal);
             }
@@ -219,12 +220,12 @@ public class Shooter {
         }
 
 
-        double hiveAngleOffset = TeleOp_Methods.xGoalOffset(goalX, predX, goalY, predY);
+        double hiveAngleOffset = xGoalOffset(goalX, predX, goalY, predY);
         distance_from_goal = Math.hypot(goalX - predX + hiveAngleOffset, goalY - predY);
 
         if (!Globals.FAILSAFE_MODE) {
 
-            if (distance_from_goal <= 180 && distance_from_goal >= 40){
+            if (distance_from_goal <= 200 && distance_from_goal >= 10){
                 TARGET_VELOCITY = optimalRpm(distance_from_goal) + rpmOffset;
                 HOOD_ANGLE = optimalAngle(distance_from_goal);
             }
@@ -335,6 +336,18 @@ public class Shooter {
                 - 112 * dist
                 + 2850;
         return Utils.clamp(rpm, minShooterRpm, maxShooterRpm);
+    }
+
+    public static double xGoalOffset(double goalX, double robotX, double goalY, double robotY){
+        double lateral = robotX - goalX;
+        double forward = robotY - goalY;
+        double hypot = Math.hypot(lateral, forward);
+
+        if (hypot < 0.01) return 0;
+
+        double sinVal = lateral / hypot;
+
+        return Utils.clamp(sinVal * X_OFFSET_GAIN, -MAX_X_OFFSET, MAX_X_OFFSET);
     }
 
 
