@@ -22,8 +22,8 @@ import org.firstinspires.ftc.teamcode.pedro.Constants;
 import java.util.List;
 
 @Configurable
-@TeleOp (name = "BLUE_TeleOp_RC", group = "TeleOp")
-public class BLUE_TeleOp_RC extends LinearOpMode {
+@TeleOp (name = "RED_TeleOp_FC", group = "TeleOp")
+public class RED_TeleOp_FC extends LinearOpMode {
     public IntakeTransfer intakeTransfer;
     public Turret turret;
     public Shooter shooter;
@@ -33,7 +33,7 @@ public class BLUE_TeleOp_RC extends LinearOpMode {
     public Follower follower;
     public TeleOp_Methods teleOp_Methods;
 
-    public static Pose startingPose = new Pose(132.5, 9, Math.toRadians(90));///de vazut
+    public static Pose startingPose = new Pose(9, 9, Math.toRadians(90));///de vazut
 
 
     public List<LynxModule> allHubs;
@@ -41,7 +41,7 @@ public class BLUE_TeleOp_RC extends LinearOpMode {
     @Override
     public void runOpMode(){
 
-        Globals.alliance = Globals.Alliance.BLUE;
+        Globals.alliance = Globals.Alliance.RED;
         Globals.faze = Globals.FAZE.TELEOP;
 
         allHubs = hardwareMap.getAll(LynxModule.class);
@@ -50,7 +50,6 @@ public class BLUE_TeleOp_RC extends LinearOpMode {
         }
 
         telemetry.setMsTransmissionInterval(11);
-
 
         intakeTransfer = new IntakeTransfer(hardwareMap);
         turret = new Turret(hardwareMap);
@@ -111,9 +110,8 @@ public class BLUE_TeleOp_RC extends LinearOpMode {
             );
 
 
-
             teleOp_Methods.handleControls(currentG1, previousG1, currentG2, previousG2);
-            drive.pedro_RC(follower, gamepad1);
+            drive.pedro_FC(follower, gamepad1);
             teleOp_Methods.runStateMachine();
             teleOp_Methods.update_telemetry(telemetry, loops);
             loops.reset();

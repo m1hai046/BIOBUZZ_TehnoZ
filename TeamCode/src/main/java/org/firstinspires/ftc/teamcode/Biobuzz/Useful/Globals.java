@@ -8,7 +8,7 @@ public class Globals {
     public static boolean FAILSAFE_MODE = false;
 
     ///poz goal aprox, de tunat
-    public static double X_GOAL_RED_SUP = 60, Y_GOAL_RED_SUP = 92, X_GOAL_RED_INF = 66, Y_GOAL_RED_INF = 52;
+    public static double X_GOAL_RED_SUP = 56, Y_GOAL_RED_SUP = 92, X_GOAL_RED_INF = 62, Y_GOAL_RED_INF = 52;
     public static double X_GOAL_BLUE_SUP = 84, Y_GOAL_BLUE_SUP = 82, X_GOAL_BLUE_INF = 84, Y_GOAL_BLUE_INF = 58;
 
     public static double predX, predY;

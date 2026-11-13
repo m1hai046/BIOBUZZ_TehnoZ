@@ -25,7 +25,7 @@ public class Turret {
     public static double offset = 0.0;
 
     public CachingServo servo_left, servo_right;
-    public static double X_OFFSET_GAIN = 17.0, MAX_X_OFFSET = 60.0;
+    public static double X_OFFSET_GAIN = 0.0, MAX_X_OFFSET = 0.0;
 
 
     public Turret(HardwareMap hardwareMap){
