@@ -55,21 +55,12 @@ public class RED_Auto_solo extends LinearOpMode {
         follower.setPose(startPose);
         follower.update();
 
-        waitForStart();
-        pathTimer.reset();
-        Shooter.rpmOffset -= 40;
-
-        turret.update_turret(
-                startPose.x(),
-                startPose.y(),
-                startPose.heading()
-        );
-        shooter.update_shooter(
-                startPose.x(),
-                startPose.y()
-        );
+        Shooter.rpmOffset = -40;
+        turret.update_turret(startPose.x(), startPose.y(), startPose.heading());
 
         intakeTransfer.RampaSus();
+        waitForStart();
+        pathTimer.reset();
 
 
         while (opModeIsActive() && !isStopRequested()) {
@@ -175,7 +166,7 @@ public class RED_Auto_solo extends LinearOpMode {
             case 4:
                 if ((!follower.following() && pathTimer.milliseconds() > 2800) ||  pathTimer.milliseconds() > 3000){
                     follower.follow(shootflower());
-                    Shooter.rpmOffset -=30;
+                    Shooter.rpmOffset = -70;
                     setPathState(13);
                 }
                 break;
