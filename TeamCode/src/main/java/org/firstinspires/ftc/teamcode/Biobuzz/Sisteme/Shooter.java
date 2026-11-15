@@ -108,8 +108,7 @@ public class Shooter {
             }
         }
 
-        double hiveAngleOffset = xGoalOffset(goalX, x, goalY, y);
-        distance_from_goal = Math.hypot(goalX - x + hiveAngleOffset, goalY - y);
+        distance_from_goal = Math.hypot(goalX - x + Turret.aimShift, goalY - y);
 
         if (!Globals.FAILSAFE_MODE) {
 
@@ -220,8 +219,7 @@ public class Shooter {
         }
 
 
-        double hiveAngleOffset = xGoalOffset(goalX, predX, goalY, predY);
-        distance_from_goal = Math.hypot(goalX - predX + hiveAngleOffset, goalY - predY);
+        distance_from_goal = Math.hypot(goalX - predX + Turret.aimShift, goalY - predY);
 
         if (!Globals.FAILSAFE_MODE) {
 
@@ -290,7 +288,6 @@ public class Shooter {
         STOPPED
     }
 
-
     public void gateClosed(){
         gate.setPosition(gateClosed);
     }
@@ -307,23 +304,6 @@ public class Shooter {
         return motor_shooter_2.getVelocity();
     }
 
-//    public double optimalAngle(double dist) {
-//        double angle = -0.0000183333 * Math.pow(dist, 3)
-//                + 0.0035 * Math.pow(dist, 2)
-//                - 0.215167 * dist
-//                + 4.4;
-//        return Utils.clamp(angle, minHoodAngle, maxHoodAngle);
-//    }
-
-
-
-//    public double optimalRpm(double dist) {
-//        double rpm = 0.00333333 * Math.pow(dist, 3)
-//                - 0.5 * Math.pow(dist, 2)
-//                + 26.66667 * dist
-//                + 940;
-//        return Utils.clamp(rpm, minShooterRpm, maxShooterRpm);
-//    }
 
     public double optimalAngle(double dist) {
         double angle = 0 * dist + 0.8;
@@ -336,18 +316,6 @@ public class Shooter {
                 - 112 * dist
                 + 2850;
         return Utils.clamp(rpm, minShooterRpm, maxShooterRpm);
-    }
-
-    public static double xGoalOffset(double goalX, double robotX, double goalY, double robotY){
-        double lateral = robotX - goalX;
-        double forward = robotY - goalY;
-        double hypot = Math.hypot(lateral, forward);
-
-        if (hypot < 0.01) return 0;
-
-        double sinVal = lateral / hypot;
-
-        return Utils.clamp(sinVal * X_OFFSET_GAIN, -MAX_X_OFFSET, MAX_X_OFFSET);
     }
 
 

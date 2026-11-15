@@ -18,11 +18,18 @@ import dev.frozenmilk.dairy.cachinghardware.CachingServo;
 @Configurable
 public class Turret {
 
-    public static double target_angle, relative_angle, target_position, failsafe_position = 0.5;
+    public static double target_angle, relative_angle, target_position, failsafe_position = 0.5025;
     public static double shooterWorldX, shooterWorldY, shooterOffset = -1.811; ///de pus offset ul de la poz shooter ului
     public static double MIN_ANGLE = -180.0, MAX_ANGLE = 180.0, MIN_POS = 0.045, MAX_POS = 0.96;///de tunat
     public static double goalX, goalY;
     public static double offset = 0.0;
+
+    public static double GOAL_DEPTH = 12.04;
+    public static double AIM_SHIFT_GAIN = 1.0;
+    public static double MAX_AIM_SHIFT = 8.0;
+
+    public static double approachDeg, aimShift, aimX, aimY;
+
 
     public CachingServo servo_left, servo_right;
     public static double X_OFFSET_GAIN = 0.0, MAX_X_OFFSET = 0.0;
@@ -60,10 +67,10 @@ public class Turret {
                 goalY = Globals.Y_GOAL_BLUE_INF;
             }
         }
-        double hiveAngleOffset = xGoalOffset(goalX, x, goalY, y);
+        computeAimPoint(shooterWorldX, shooterWorldY);
 
 
-        target_angle = Math.atan2(goalY - shooterWorldY, goalX - shooterWorldX + hiveAngleOffset);
+        target_angle = Math.atan2(goalY - shooterWorldY, goalX - shooterWorldX);
         target_angle = AngleUnit.normalizeRadians(target_angle);
         heading = AngleUnit.normalizeRadians(heading);
 
@@ -112,8 +119,9 @@ public class Turret {
         }
 
 
-        double hiveAngleOffset = xGoalOffset(goalX, predX, goalY, predY);
-        target_angle = Math.atan2(goalY - shooterWorldY, goalX - shooterWorldX + hiveAngleOffset);
+        computeAimPoint(shooterWorldX, shooterWorldY);
+
+        target_angle = Math.atan2(goalY - shooterWorldY, goalX - shooterWorldX);
         target_angle = AngleUnit.normalizeRadians(target_angle);
         heading = AngleUnit.normalizeRadians(heading);
 
@@ -137,16 +145,17 @@ public class Turret {
         servo_right.setPosition(x);
     }
 
-    public static double xGoalOffset(double goalX, double robotX, double goalY, double robotY){
-        double lateral = robotX - goalX;
-        double forward = robotY - goalY;
-        double hypot = Math.hypot(lateral, forward);
+    private static void computeAimPoint(double sx, double sy){///  sx-shooterX   sy-shooterY
+        double lateral = sx - goalX;
+        double forward = Math.max(Math.abs(sy - goalY), 1.0);
 
-        if (hypot < 0.01) return 0;
+        approachDeg = Math.toDegrees(Math.atan2(lateral, forward));
 
-        double sinVal = lateral / hypot;
+        aimShift = Utils.clamp(AIM_SHIFT_GAIN * (GOAL_DEPTH / 2.0) * lateral / forward,
+                -MAX_AIM_SHIFT, MAX_AIM_SHIFT);
 
-        return Utils.clamp(sinVal * X_OFFSET_GAIN, -MAX_X_OFFSET, MAX_X_OFFSET);
+        aimX = goalX + aimShift;
+        aimY = goalY;
     }
 
 }
