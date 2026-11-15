@@ -11,18 +11,12 @@ import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Biobuzz.Useful.Globals;
-import org.firstinspires.ftc.teamcode.Biobuzz.Useful.TeleOp_Methods;
 
 import dev.frozenmilk.dairy.cachinghardware.CachingDcMotorEx;
 import dev.frozenmilk.dairy.cachinghardware.CachingServo;
 
 /// notes
-///
 /// trb testat offset l ala de unghi, ca eu sunt desyul de sigur ca nu trb doar pe axa X dar si pe Y
-/// trb facuta poz reglaj sa fie in range si la gate lfl
-/// trb tunat: pvs ul, pozitii gate, interpolari, deadzone si lookheadtime care e in globals
-/// trb pus in teleop timer de reset pt cand dai shoot
-///
 ///
 
 @Configurable
@@ -36,7 +30,7 @@ public class Shooter {
     public boolean running = false, shooting = false;
     public static double goalX, goalY;
 
-    public static double minHoodAngle = 0.8,  maxHoodAngle = 0.8, minShooterRpm = 1380.0, maxShooterRpm = 1530.0;
+    public static double minHoodAngle = 0.8,  maxHoodAngle = 0.8, minShooterRpm = 1370.0, maxShooterRpm = 1530.0;
     public static double rpmOffset = 0.0;
 
     public State state;
@@ -310,11 +304,21 @@ public class Shooter {
         return Utils.clamp(angle, minHoodAngle, maxHoodAngle);
     }
 
+//    public double optimalRpm(double dist) {
+//        double rpm = -0.000666667 * Math.pow(dist, 4)
+//                + 0.1 * Math.pow(dist, 3)
+//                - 5.23333 * Math.pow(dist, 2)
+//                + 116 * dist
+//                + 450;
+//        return Utils.clamp(rpm, minShooterRpm, maxShooterRpm);
+//    }
+
     public double optimalRpm(double dist) {
-        double rpm = -0.02 * Math.pow(dist, 3)
-                + 2.7 * Math.pow(dist, 2)
-                - 112 * dist
-                + 2850;
+        double rpm = -0.000333333 * Math.pow(dist, 4)
+                + 0.05 * Math.pow(dist, 3)
+                - 2.56667 * Math.pow(dist, 2)
+                + 56 * dist
+                + 930;
         return Utils.clamp(rpm, minShooterRpm, maxShooterRpm);
     }
 

@@ -22,7 +22,7 @@ public class Turret {
     public static double shooterWorldX, shooterWorldY, shooterOffset = -1.811; ///de pus offset ul de la poz shooter ului
     public static double MIN_ANGLE = -180.0, MAX_ANGLE = 180.0, MIN_POS = 0.045, MAX_POS = 0.96;///de tunat
     public static double goalX, goalY;
-    public static double offset = 0.0;
+    public static double offset = 0.0, centerOffset = -7.0;
 
     public static double GOAL_DEPTH = 12.04;
     public static double AIM_SHIFT_GAIN = 1.0;
@@ -75,7 +75,7 @@ public class Turret {
         heading = AngleUnit.normalizeRadians(heading);
 
         relative_angle = Math.toDegrees(target_angle - heading);
-        relative_angle = AngleUnit.normalizeDegrees(relative_angle) + offset;
+        relative_angle = AngleUnit.normalizeDegrees(relative_angle) + offset + centerOffset;
         relative_angle = Math.max(MIN_ANGLE, Math.min(MAX_ANGLE, relative_angle));
         target_position = Range.scale(relative_angle, MIN_ANGLE, MAX_ANGLE, MIN_POS, MAX_POS);
 
@@ -126,7 +126,7 @@ public class Turret {
         heading = AngleUnit.normalizeRadians(heading);
 
         // Normalize and Scale
-        relative_angle = Math.toDegrees(AngleUnit.normalizeRadians(target_angle - heading)) + offset;
+        relative_angle = Math.toDegrees(AngleUnit.normalizeRadians(target_angle - heading)) + offset + centerOffset;
 //        relative_angle = AngleUnit.normalizeDegrees(relative_angle + 180);   //pt turela pe invers
         ///am comentat o ca nu mai avem turela la spate
         // Ensure relative_angle is within your physical hardware limits

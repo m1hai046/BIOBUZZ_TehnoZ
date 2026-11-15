@@ -29,7 +29,7 @@ public class IntakeTransfer {
 
     public static boolean reset = true;
     public static int confirmare = 0;
-    public static double thresholdAmps = 6;
+    public static double thresholdAmps = 16;
 
 
     /// VARIABILE TRANSFER
