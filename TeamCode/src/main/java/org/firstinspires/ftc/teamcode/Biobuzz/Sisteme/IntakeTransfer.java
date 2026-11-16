@@ -14,7 +14,7 @@ import dev.frozenmilk.dairy.cachinghardware.CachingServo;
 public class IntakeTransfer {
 
     public static CachingDcMotorEx motorIntake, motorTransfer;
-    public CachingServo rampaLeft, rampaRight;
+    public CachingServo rampaLeft;
 
     public static double rampaJos = 0.07;
     public static double rampaSus = 0.95;
@@ -41,11 +41,11 @@ public class IntakeTransfer {
     public IntakeTransfer(HardwareMap hardwareMap){
         motorIntake = new CachingDcMotorEx(hardwareMap.get(DcMotorEx.class, "MINT"));
         motorTransfer = new CachingDcMotorEx(hardwareMap.get(DcMotorEx.class, "MTR"));
-        rampaLeft = new CachingServo(hardwareMap.get(Servo.class, "RampaRight"));
-        rampaRight = new CachingServo(hardwareMap.get(Servo.class, "RampaLeft"));
+        rampaLeft = new CachingServo(hardwareMap.get(Servo.class, "RampaLeft"));
 
         motorIntake.setDirection(CachingDcMotorEx.Direction.REVERSE);
         motorTransfer.setDirection(CachingDcMotorEx.Direction.FORWARD);
+        RampaJos();
     }
 
     public void Collect(){
@@ -66,12 +66,10 @@ public class IntakeTransfer {
     }
 
     public void RampaSus(){
-        rampaRight.setPosition(rampaSus);
         rampaLeft.setPosition(rampaSus);
         flower = false;
     }
     public void RampaJos(){
-        rampaRight.setPosition(rampaJos);
         rampaLeft.setPosition(rampaJos);
         flower = true;
     }

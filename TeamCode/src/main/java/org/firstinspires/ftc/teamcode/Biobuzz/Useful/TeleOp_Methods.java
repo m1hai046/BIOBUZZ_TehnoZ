@@ -188,7 +188,6 @@ public class TeleOp_Methods {
 
                 telemetryM.debug("--- Shooter ---");
         telemetryM.addData("motor1RPM",      M_shooter.motor_shooter.getVelocity());
-        telemetryM.addData("motor2RPM",      M_shooter.motor_shooter_2.getVelocity());
         //telemetryM.addData("RPM",            Shooter.getRpm(M_shooter.motor_shooter.getVelocity()));
         telemetryM.addData("targetVelocity", Shooter.TARGET_VELOCITY);
         telemetryM.addData("Velocity",       M_shooter.motor_shooter.getVelocity());
@@ -196,7 +195,6 @@ public class TeleOp_Methods {
         telemetryM.addData("graph.shooter.target", Shooter.TARGET_VELOCITY);
         telemetryM.addData("graph.shooter.actual", M_shooter.motor_shooter.getVelocity());
         telemetryM.addData("graph.shooter.pwr1",   M_shooter.motor_shooter.getPower());
-        telemetryM.addData("graph.shooter.pwr2",   M_shooter.motor_shooter_2.getPower());
 
         //telemetryM.addData("graph.battery",  batteryVoltage);
 

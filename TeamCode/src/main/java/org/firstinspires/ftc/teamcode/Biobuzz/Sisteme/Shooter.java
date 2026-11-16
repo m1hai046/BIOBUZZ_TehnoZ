@@ -4,7 +4,6 @@ import com.bylazar.configurables.annotations.Configurable;
 import com.pedropathing.utils.Utils;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
@@ -39,27 +38,22 @@ public class Shooter {
     public ElapsedTime shootTimer;
     public double distance_from_goal;
 
-    public CachingDcMotorEx motor_shooter, motor_shooter_2;
+    public CachingDcMotorEx motor_shooter;
     public CachingServo gate, hood;
     public static double X_OFFSET_GAIN = 0.15, MAX_X_OFFSET = 0.0;
 
     public Shooter(HardwareMap hardwareMap){
         motor_shooter = new CachingDcMotorEx(hardwareMap.get(DcMotorEx.class, "MSHT"));
-        motor_shooter_2 = new CachingDcMotorEx(hardwareMap.get(DcMotorEx.class, "MSHT2"));
         gate = new CachingServo(hardwareMap.get(Servo.class, "Gate"));
         hood = new CachingServo(hardwareMap.get(Servo.class, "Reglaj"));
 
         motor_shooter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        motor_shooter_2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
         motor_shooter.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        motor_shooter_2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         motor_shooter.setDirection(DcMotor.Direction.FORWARD);
-        motor_shooter_2.setDirection(DcMotorSimple.Direction.REVERSE);
 
         motor_shooter.setCachingTolerance(0.001);
-        motor_shooter_2.setCachingTolerance(0.001);
 
         state = State.RUNNING;
         TARGET_VELOCITY = TARGET_STOPPED;
@@ -132,7 +126,6 @@ public class Shooter {
             pow = Math.max(-1.0, Math.min(1.0, pow));
 
             motor_shooter.setPower(pow);
-            motor_shooter_2.setPower(pow);
             hood.setPosition(HOOD_ANGLE);
         }
 
@@ -159,7 +152,6 @@ public class Shooter {
                 shooting = false;
                 running = false;
                 motor_shooter.setPower(0.0);
-                motor_shooter_2.setPower(0.0);
                 gateClosed();
                 break;
 
@@ -242,7 +234,6 @@ public class Shooter {
             pow = Math.max(-1.0, Math.min(1.0, pow));
 
             motor_shooter.setPower(pow);
-            motor_shooter_2.setPower(pow);
             hood.setPosition(HOOD_ANGLE);
         }
 
@@ -270,7 +261,6 @@ public class Shooter {
                 shooting = false;
                 running = false;
                 motor_shooter.setPower(0.0);
-                motor_shooter_2.setPower(0.0);
                 gateClosed();
                 break;
         }
@@ -292,10 +282,6 @@ public class Shooter {
 
     public double MSHT1getVelocity(){
         return motor_shooter.getVelocity();
-    }
-
-    public double MSHT2getVelocity(){
-        return motor_shooter_2.getVelocity();
     }
 
 
