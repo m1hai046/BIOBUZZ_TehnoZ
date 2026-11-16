@@ -8,10 +8,8 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.Biobuzz.Useful.Globals;
-import org.firstinspires.ftc.teamcode.Biobuzz.Useful.TeleOp_Methods;
 
 import dev.frozenmilk.dairy.cachinghardware.CachingServo;
-
 
 
 ///de adaugat compesare de rotatie pt turela
@@ -46,29 +44,8 @@ public class Turret {
         shooterWorldY = y + (shooterOffset * Math.sin(heading));
 
 
-        if(Globals.alliance == Globals.Alliance.RED){
-            if (y >70.7) {///sup
-                goalX = Globals.X_GOAL_RED_SUP;
-                goalY = Globals.Y_GOAL_RED_SUP;
-            }
-            else{///inf
-                goalX = Globals.X_GOAL_RED_INF;
-                goalY = Globals.Y_GOAL_RED_INF;
-            }
-        }
-
-        else {
-            if (y >70.7) {///sup
-                goalX = Globals.X_GOAL_BLUE_SUP;
-                goalY = Globals.Y_GOAL_BLUE_SUP;
-            }
-            else{///inf
-                goalX = Globals.X_GOAL_BLUE_INF;
-                goalY = Globals.Y_GOAL_BLUE_INF;
-            }
-        }
-        computeAimPoint(shooterWorldX, shooterWorldY);
-
+        Globals.getGoal(y);
+        aimPointOffset(shooterWorldX, shooterWorldY);
 
         target_angle = Math.atan2(goalY - shooterWorldY, goalX - shooterWorldX);
         target_angle = AngleUnit.normalizeRadians(target_angle);
@@ -96,40 +73,16 @@ public class Turret {
         shooterWorldY = predY + (shooterOffset * Math.sin(heading));
 
 
-        if(Globals.alliance == Globals.Alliance.RED){
-            if (y >70.7) {///sup
-                goalX = Globals.X_GOAL_RED_SUP;
-                goalY = Globals.Y_GOAL_RED_SUP;
-            }
-            else{///inf
-                goalX = Globals.X_GOAL_RED_INF;
-                goalY = Globals.Y_GOAL_RED_INF;
-            }
-        }
-
-        else {
-            if (y >70.7) {///sup
-                goalX = Globals.X_GOAL_BLUE_SUP;
-                goalY = Globals.Y_GOAL_BLUE_SUP;
-            }
-            else{///inf
-                goalX = Globals.X_GOAL_BLUE_INF;
-                goalY = Globals.Y_GOAL_BLUE_INF;
-            }
-        }
-
-
-        computeAimPoint(shooterWorldX, shooterWorldY);
+        Globals.getGoal(y);
+        aimPointOffset(shooterWorldX, shooterWorldY);
 
         target_angle = Math.atan2(goalY - shooterWorldY, goalX - shooterWorldX);
         target_angle = AngleUnit.normalizeRadians(target_angle);
         heading = AngleUnit.normalizeRadians(heading);
 
-        // Normalize and Scale
         relative_angle = Math.toDegrees(AngleUnit.normalizeRadians(target_angle - heading)) + offset + centerOffset;
 //        relative_angle = AngleUnit.normalizeDegrees(relative_angle + 180);   //pt turela pe invers
         ///am comentat o ca nu mai avem turela la spate
-        // Ensure relative_angle is within your physical hardware limits
         relative_angle = Math.max(MIN_ANGLE, Math.min(MAX_ANGLE, relative_angle));
 
         target_position = Range.scale(relative_angle, MIN_ANGLE, MAX_ANGLE, MIN_POS, MAX_POS);
@@ -145,7 +98,7 @@ public class Turret {
         servo_right.setPosition(x);
     }
 
-    private static void computeAimPoint(double sx, double sy){///  sx-shooterX   sy-shooterY
+    private static void aimPointOffset(double sx, double sy){///  sx-shooterX   sy-shooterY
         double lateral = sx - goalX;
         double forward = Math.max(Math.abs(sy - goalY), 1.0);
 

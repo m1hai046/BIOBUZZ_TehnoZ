@@ -40,7 +40,6 @@ public class Shooter {
 
     public CachingDcMotorEx motor_shooter;
     public CachingServo gate, hood;
-    public static double X_OFFSET_GAIN = 0.15, MAX_X_OFFSET = 0.0;
 
     public Shooter(HardwareMap hardwareMap){
         motor_shooter = new CachingDcMotorEx(hardwareMap.get(DcMotorEx.class, "MSHT"));
@@ -74,27 +73,7 @@ public class Shooter {
         double vel = motor_shooter.getVelocity();
 
 
-        if(Globals.alliance == Globals.Alliance.RED){
-            if (y >70.7) {///sup
-                goalX = Globals.X_GOAL_RED_SUP;
-                goalY = Globals.Y_GOAL_RED_SUP;
-            }
-            else{///inf
-                goalX = Globals.X_GOAL_RED_INF;
-                goalY = Globals.Y_GOAL_RED_INF;
-            }
-        }
-
-        else {
-            if (y >70.7) {///sup
-                goalX = Globals.X_GOAL_BLUE_SUP;
-                goalY = Globals.Y_GOAL_BLUE_SUP;
-            }
-            else{///inf
-                goalX = Globals.X_GOAL_BLUE_INF;
-                goalY = Globals.Y_GOAL_BLUE_INF;
-            }
-        }
+        Globals.getGoal(y);
 
         distance_from_goal = Math.hypot(goalX - x + Turret.aimShift, goalY - y);
 
@@ -182,27 +161,7 @@ public class Shooter {
         Globals.predY = predY;
 
 
-        if(Globals.alliance == Globals.Alliance.RED){
-            if (y >70.7) {///sup
-                goalX = Globals.X_GOAL_RED_SUP;
-                goalY = Globals.Y_GOAL_RED_SUP;
-            }
-            else{///inf
-                goalX = Globals.X_GOAL_RED_INF;
-                goalY = Globals.Y_GOAL_RED_INF;
-            }
-        }
-
-        else {
-            if (y >70.7) {///sup
-                goalX = Globals.X_GOAL_BLUE_SUP;
-                goalY = Globals.Y_GOAL_BLUE_SUP;
-            }
-            else{///inf
-                goalX = Globals.X_GOAL_BLUE_INF;
-                goalY = Globals.Y_GOAL_BLUE_INF;
-            }
-        }
+        Globals.getGoal(y);
 
 
         distance_from_goal = Math.hypot(goalX - predX + Turret.aimShift, goalY - predY);
@@ -290,14 +249,6 @@ public class Shooter {
         return Utils.clamp(angle, minHoodAngle, maxHoodAngle);
     }
 
-//    public double optimalRpm(double dist) {
-//        double rpm = -0.000666667 * Math.pow(dist, 4)
-//                + 0.1 * Math.pow(dist, 3)
-//                - 5.23333 * Math.pow(dist, 2)
-//                + 116 * dist
-//                + 450;
-//        return Utils.clamp(rpm, minShooterRpm, maxShooterRpm);
-//    }
 
     public double optimalRpm(double dist) {
         double rpm = -0.000333333 * Math.pow(dist, 4)

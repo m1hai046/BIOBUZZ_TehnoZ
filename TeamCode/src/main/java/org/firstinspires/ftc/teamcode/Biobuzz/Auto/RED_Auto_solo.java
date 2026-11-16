@@ -189,7 +189,6 @@ public class RED_Auto_solo extends LinearOpMode {
                 }
                 break;
 
-
         }
     }
 }
