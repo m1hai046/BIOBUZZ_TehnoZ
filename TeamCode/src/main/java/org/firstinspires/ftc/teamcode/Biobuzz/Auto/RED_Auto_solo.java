@@ -22,7 +22,7 @@ import org.firstinspires.ftc.teamcode.pedro.Constants;
 public class RED_Auto_solo extends LinearOpMode {
 
     private final Pose startPose = new Pose(38, 8.5, Math.toRadians(180));
-    private final Pose collectgarden = new Pose(6.5, 8, Math.toRadians(181));
+    private final Pose collectgarden = new Pose(6.5, 8, Math.toRadians(179));
     private final Pose shootgarden = new Pose(48, 118, Math.toRadians(-124));
     private final Pose shootgardenControl1 = new Pose(29, 90, Math.toRadians(0));
     private final Pose collectflowerStart = new Pose(48, 118, Math.toRadians(90));
@@ -30,14 +30,14 @@ public class RED_Auto_solo extends LinearOpMode {
     private final Pose shootflowerStart = new Pose(49, 130, Math.toRadians(90));
     private final Pose shootflower = new Pose(52, 121, Math.toRadians(90));
     private final Pose collectflower2p1 = new Pose(23, 46, Math.toRadians(83.6598));
-    private final Pose collectflower2p1Control1 = new Pose(28, 91, Math.toRadians(0));
+    private final Pose collectflower2p1Control1 = new Pose(28, 90, Math.toRadians(0));
     private final Pose collectflower2p2Start = new Pose(23, 46, Math.toRadians(180));
-    private final Pose collectflower2p2 = new Pose(12, 50, Math.toRadians(180));
-    private final Pose shootflower2Start = new Pose(12, 50, Math.toRadians(180));
+    private final Pose collectflower2p2 = new Pose(12, 47, Math.toRadians(180));
+    private final Pose shootflower2Start = new Pose(12, 47, Math.toRadians(180));
     private final Pose shootflower2 = new Pose(54, 118, Math.toRadians(180));
     private final Pose shootflower2Control1 = new Pose(33.3793, 43.937, Math.toRadians(0));
     private final Pose shootflower2Control2 = new Pose(22, 115, Math.toRadians(0));
-    private final Pose park = new Pose(6, 118, Math.toRadians(180));
+    private final Pose park = new Pose(9, 118, Math.toRadians(180));
 
     public Follower follower;
     public ElapsedTime pathTimer;
@@ -62,7 +62,6 @@ public class RED_Auto_solo extends LinearOpMode {
 
         turret.update_turret(startPose.x(), startPose.y(), startPose.heading());
         intakeTransfer.RampaSus();
-        Turret.centerOffset = 0;
 
         waitForStart();
         pathTimer.reset();
@@ -218,14 +217,14 @@ public class RED_Auto_solo extends LinearOpMode {
                 break;
 
             case 7:
-                if ((!follower.following() && pathTimer.milliseconds() > 2000) || pathTimer.milliseconds() > 2100){
+                if ((!follower.following() && pathTimer.milliseconds() > 4000) || pathTimer.milliseconds() > 4100){
                     follower.follow(shootflower2());
                     setPathState(8);
                 }
                 break;
 
             case 8:
-                if (!follower.following()){
+                if (!follower.following() && pathTimer.milliseconds() > 3500){
                     intakeTransfer.RampaSus();
                     intakeTransfer.Shoot();
                     shooter.state = Shooter.State.SHOOTING;
