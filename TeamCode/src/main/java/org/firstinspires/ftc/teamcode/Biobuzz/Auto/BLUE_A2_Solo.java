@@ -8,14 +8,14 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Biobuzz.Sisteme.IntakeTransfer;
-import org.firstinspires.ftc.teamcode.Biobuzz.Sisteme.Shooter;
-import org.firstinspires.ftc.teamcode.Biobuzz.Sisteme.Turret;
+import org.firstinspires.ftc.teamcode.Biobuzz.Sisteme.Shooter.Shooter;
+import org.firstinspires.ftc.teamcode.Biobuzz.Sisteme.Turret.Turret;
 import org.firstinspires.ftc.teamcode.Biobuzz.Useful.Globals;
 import org.firstinspires.ftc.teamcode.pedro.Constants;
 
 
 @Configurable
-@Autonomous(name="BLUE_Auto_solo", group="Auto")
+@Autonomous(name="BLUE_A2_Solo", group="Auto")
 
 public class BLUE_A2_Solo extends LinearOpMode {
 

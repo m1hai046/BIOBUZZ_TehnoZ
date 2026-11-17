@@ -1,6 +1,5 @@
-package org.firstinspires.ftc.teamcode.Biobuzz.Sisteme;
+package org.firstinspires.ftc.teamcode.Biobuzz.Sisteme.Shooter;
 
-import com.bylazar.configurables.annotations.Configurable;
 import com.pedropathing.utils.Utils;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -9,22 +8,20 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.Biobuzz.Sisteme.Turret.Turret;
 import org.firstinspires.ftc.teamcode.Biobuzz.Useful.Globals;
 
 import dev.frozenmilk.dairy.cachinghardware.CachingDcMotorEx;
 import dev.frozenmilk.dairy.cachinghardware.CachingServo;
 
-@Configurable
 public class Shooter {
 
     public VoltageSensor shooter_voltage;
-    public static double TARGET_VELOCITY, HOOD_ANGLE, gateOpen = 0.8, gateClosed = 0.54;
-    public static double kP = 0.005 , kV = 0.00036, kS = 0.12, nominalVoltage = 12.0 , error, SHOOT_TIME = 800;
-    public static double FAILSAFE_VELOCITY = 1420.0, FAILSAFE_ANGLE = 0.8  , TARGET_STOPPED = 0.0;
     public boolean running = false, shooting = false;
     public static double goalX, goalY;
+    public static double error, nominalVoltage = 12.0;
+    public static double TARGET_VELOCITY, HOOD_ANGLE;
 
-    public static double minHoodAngle = 0.8,  maxHoodAngle = 0.8, minShooterRpm = 1370.0, maxShooterRpm = 1530.0;
     public static double rpmOffset = 0.0;
 
     public State state;
@@ -50,9 +47,9 @@ public class Shooter {
         motor_shooter.setCachingTolerance(0.001);
 
         state = State.RUNNING;
-        TARGET_VELOCITY = TARGET_STOPPED;
+        TARGET_VELOCITY = Shooter_Constants.TARGET_STOPPED;
         rpmOffset = 0;
-        gate.setPosition(gateClosed);
+        gate.setPosition(Shooter_Constants.gateClosed);
         shooter_voltage = hardwareMap.voltageSensor.iterator().next();
 
         shootTimer = new ElapsedTime();
@@ -101,8 +98,8 @@ public class Shooter {
             }
         }
         else {
-            TARGET_VELOCITY = FAILSAFE_VELOCITY;
-            HOOD_ANGLE = FAILSAFE_ANGLE;
+            TARGET_VELOCITY = Shooter_Constants.FAILSAFE_VELOCITY;
+            HOOD_ANGLE = Shooter_Constants.FAILSAFE_ANGLE;
         }
 
         error = TARGET_VELOCITY - vel;
@@ -113,8 +110,8 @@ public class Shooter {
 
             double voltageScaling = nominalVoltage / shooter_voltage.getVoltage();
 
-            double proportional = (kP * error);
-            double feedforward = (kV * TARGET_VELOCITY) + kS;
+            double proportional = (Shooter_Constants.kP * error);
+            double feedforward = (Shooter_Constants.kV * TARGET_VELOCITY) + Shooter_Constants.kS;
 
             double pow = (proportional + feedforward) * voltageScaling;
 
@@ -135,9 +132,9 @@ public class Shooter {
             case SHOOTING:
                 shooting = true;
                 running = true;
-                if (Math.abs(error) <= 100) {
+                if (Math.abs(error) <= Shooter_Constants.SHOOT_TOLERANCE) {
                     gateOpen();
-                    if (shootTimer.milliseconds() > SHOOT_TIME) {
+                    if (shootTimer.milliseconds() > Shooter_Constants.SHOOT_TIME) {
                         state = State.RUNNING;
                     }
                 }
@@ -210,8 +207,8 @@ public class Shooter {
             }
         }
         else {
-            TARGET_VELOCITY = FAILSAFE_VELOCITY;
-            HOOD_ANGLE = FAILSAFE_ANGLE;
+            TARGET_VELOCITY = Shooter_Constants.FAILSAFE_VELOCITY;
+            HOOD_ANGLE = Shooter_Constants.FAILSAFE_ANGLE;
         }
 
         error = TARGET_VELOCITY - vel;
@@ -221,8 +218,8 @@ public class Shooter {
             double voltageScaling = nominalVoltage / shooter_voltage.getVoltage();
 
 
-            double proportional = (kP * error);
-            double feedforward = (kV * TARGET_VELOCITY) + kS;
+            double proportional = (Shooter_Constants.kP * error);
+            double feedforward = (Shooter_Constants.kV * TARGET_VELOCITY) + Shooter_Constants.kS;
 
             double pow = (proportional + feedforward) * voltageScaling;
 
@@ -244,9 +241,9 @@ public class Shooter {
             case SHOOTING:
                 shooting = true;
                 running = true;
-                if (Math.abs(error) <= 100) {
+                if (Math.abs(error) <= Shooter_Constants.SHOOT_TOLERANCE) {
                     gateOpen();
-                    if (shootTimer.milliseconds() > SHOOT_TIME) {///trb pus timer in teleop cand apesi pe buton sa isi dea reset
+                    if (shootTimer.milliseconds() > Shooter_Constants.SHOOT_TIME) {///trb pus timer in teleop cand apesi pe buton sa isi dea reset
                         state = State.RUNNING;
                     }
                 }
@@ -268,11 +265,11 @@ public class Shooter {
     }
 
     public void gateClosed(){
-        gate.setPosition(gateClosed);
+        gate.setPosition(Shooter_Constants.gateClosed);
     }
 
     public void gateOpen(){
-        gate.setPosition(gateOpen);
+        gate.setPosition(Shooter_Constants.gateOpen);
     }
 
     public double MSHT1getVelocity(){
@@ -282,9 +279,8 @@ public class Shooter {
 
     public double optimalAngle(double dist) {
         double angle = 0 * dist + 0.8;
-        return Utils.clamp(angle, minHoodAngle, maxHoodAngle);
+        return Utils.clamp(angle, Shooter_Constants.minHoodAngle, Shooter_Constants.maxHoodAngle);
     }
-
 
     public double optimalRpm(double dist) {
         double rpm = -0.000333333 * Math.pow(dist, 4)
@@ -292,10 +288,7 @@ public class Shooter {
                 - 2.56667 * Math.pow(dist, 2)
                 + 56 * dist
                 + 930;
-        return Utils.clamp(rpm, minShooterRpm, maxShooterRpm);
+        return Utils.clamp(rpm, Shooter_Constants.minShooterRpm, Shooter_Constants.maxShooterRpm);
     }
 
-
 }
-
-

@@ -10,8 +10,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Biobuzz.Sisteme.IntakeTransfer;
-import org.firstinspires.ftc.teamcode.Biobuzz.Sisteme.Shooter;
-import org.firstinspires.ftc.teamcode.Biobuzz.Sisteme.Turret;
+import org.firstinspires.ftc.teamcode.Biobuzz.Sisteme.Shooter.Shooter;
+import org.firstinspires.ftc.teamcode.Biobuzz.Sisteme.Shooter.Shooter_Constants;
+import org.firstinspires.ftc.teamcode.Biobuzz.Sisteme.Turret.Turret;
 
 
 @Configurable
@@ -139,7 +140,7 @@ public class TeleOp_Methods {
 
         if (robotState == TeleOp_Methods.RobotState.SHOOT)
             telemetry.addData("  Shoot timer", "%.0f / %.0f ms",
-                    M_shooter.shootTimer.milliseconds(), Shooter.SHOOT_TIME);
+                    M_shooter.shootTimer.milliseconds(), Shooter_Constants.SHOOT_TIME);
 
         telemetry.addLine("-------- TURELA --------");
         telemetry.addData(" Unghi target", "%.1f°", Turret.target_position);

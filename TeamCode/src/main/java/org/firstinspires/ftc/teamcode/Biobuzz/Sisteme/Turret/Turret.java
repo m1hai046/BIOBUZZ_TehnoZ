@@ -1,6 +1,5 @@
-package org.firstinspires.ftc.teamcode.Biobuzz.Sisteme;
+package org.firstinspires.ftc.teamcode.Biobuzz.Sisteme.Turret;
 
-import com.bylazar.configurables.annotations.Configurable;
 import com.pedropathing.utils.Utils;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -11,19 +10,13 @@ import org.firstinspires.ftc.teamcode.Biobuzz.Useful.Globals;
 
 import dev.frozenmilk.dairy.cachinghardware.CachingServo;
 
-///de adaugat compesare de rotatie pt turela
-@Configurable
 public class Turret {
 
-    public static double target_angle, relative_angle, target_position, failsafe_position = 0.5025;
-    public static double shooterWorldX, shooterWorldY, shooterOffset = -1.811; ///de pus offset ul de la poz shooter ului
-    public static double MIN_ANGLE = -180.0, MAX_ANGLE = 180.0, MIN_POS = 0.045, MAX_POS = 0.96;///de tunat
+    public static double target_angle, relative_angle, target_position;
     public static double goalX, goalY;
-    public static double offset = 0.0, centerOffset = -6.0;
+    public static double shooterWorldX, shooterWorldY;
+    public static double offset = 0.0;
 
-    public static double GOAL_DEPTH = 12.04;
-    public static double SHOOTER_AIM_GAIN = 1.0, TURRET_AIM_FRACTION = 0.5;;
-    public static double MAX_AIM_SHIFT = 8.0;
 
     public static double approachDeg, aimShift, aimX, aimY;
     public CachingServo servo_left, servo_right;
@@ -37,8 +30,8 @@ public class Turret {
 
     public void update_turret(double x, double y, double heading){
 
-        shooterWorldX = x + (shooterOffset * Math.cos(heading));
-        shooterWorldY = y + (shooterOffset * Math.sin(heading));
+        shooterWorldX = x + (TurretConstants.shooterOffset * Math.cos(heading));
+        shooterWorldY = y + (TurretConstants.shooterOffset * Math.sin(heading));
 
 
         if(Globals.alliance == Globals.Alliance.RED){
@@ -70,15 +63,15 @@ public class Turret {
         heading = AngleUnit.normalizeRadians(heading);
 
         relative_angle = Math.toDegrees(target_angle - heading);
-        relative_angle = AngleUnit.normalizeDegrees(relative_angle) + offset + centerOffset;
-        relative_angle = Math.max(MIN_ANGLE, Math.min(MAX_ANGLE, relative_angle));
-        target_position = Range.scale(relative_angle, MIN_ANGLE, MAX_ANGLE, MIN_POS, MAX_POS);
+        relative_angle = AngleUnit.normalizeDegrees(relative_angle) + offset + TurretConstants.centerOffset;
+        relative_angle = Math.max(TurretConstants.MIN_ANGLE, Math.min(TurretConstants.MAX_ANGLE, relative_angle));
+        target_position = Range.scale(relative_angle, TurretConstants.MIN_ANGLE, TurretConstants.MAX_ANGLE, TurretConstants.MIN_POS, TurretConstants.MAX_POS);
 
         if(!Globals.FAILSAFE_MODE){
             moveTo(target_position);
         }
         else{
-            moveTo(failsafe_position);
+            moveTo(TurretConstants.failsafe_position);
         }
     }
 
@@ -87,8 +80,8 @@ public class Turret {
         double predX = Globals.predX;
         double predY = Globals.predY;
 
-        shooterWorldX = predX + (shooterOffset * Math.cos(heading));
-        shooterWorldY = predY + (shooterOffset * Math.sin(heading));
+        shooterWorldX = predX + (TurretConstants.shooterOffset * Math.cos(heading));
+        shooterWorldY = predY + (TurretConstants.shooterOffset * Math.sin(heading));
 
 
         if(Globals.alliance == Globals.Alliance.RED){
@@ -120,17 +113,17 @@ public class Turret {
         target_angle = AngleUnit.normalizeRadians(target_angle);
         heading = AngleUnit.normalizeRadians(heading);
 
-        relative_angle = Math.toDegrees(AngleUnit.normalizeRadians(target_angle - heading)) + offset + centerOffset;
+        relative_angle = Math.toDegrees(AngleUnit.normalizeRadians(target_angle - heading)) + offset + TurretConstants.centerOffset;
 //        relative_angle = AngleUnit.normalizeDegrees(relative_angle + 180);   //pt turela pe invers
         ///am comentat o ca nu mai avem turela la spate
-        relative_angle = Math.max(MIN_ANGLE, Math.min(MAX_ANGLE, relative_angle));
+        relative_angle = Math.max(TurretConstants.MIN_ANGLE, Math.min(TurretConstants.MAX_ANGLE, relative_angle));
 
-        target_position = Range.scale(relative_angle, MIN_ANGLE, MAX_ANGLE, MIN_POS, MAX_POS);
+        target_position = Range.scale(relative_angle, TurretConstants.MIN_ANGLE, TurretConstants.MAX_ANGLE, TurretConstants.MIN_POS, TurretConstants.MAX_POS);
 
         if (!Globals.FAILSAFE_MODE)
             moveTo(target_position);
         else
-            moveTo(failsafe_position);
+            moveTo(TurretConstants.failsafe_position);
     }
 
     public void moveTo(double x){
@@ -144,10 +137,10 @@ public class Turret {
 
         approachDeg = Math.toDegrees(Math.atan2(lateral, forward));
 
-        aimShift = Utils.clamp(SHOOTER_AIM_GAIN * (GOAL_DEPTH / 2.0) * lateral / forward,
-                -MAX_AIM_SHIFT, MAX_AIM_SHIFT);
+        aimShift = Utils.clamp(TurretConstants.SHOOTER_AIM_GAIN * (TurretConstants.GOAL_DEPTH / 2.0) * lateral / forward,
+                -TurretConstants.MAX_AIM_SHIFT, TurretConstants.MAX_AIM_SHIFT);
 
-        aimX = goalX + aimShift * TURRET_AIM_FRACTION;
+        aimX = goalX + aimShift * TurretConstants.TURRET_AIM_FRACTION;
 
         aimY = goalY;
     }

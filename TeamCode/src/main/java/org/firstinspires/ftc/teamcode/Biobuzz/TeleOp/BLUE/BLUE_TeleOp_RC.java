@@ -13,9 +13,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Biobuzz.Sisteme.Drive;
 import org.firstinspires.ftc.teamcode.Biobuzz.Sisteme.IntakeTransfer;
-import org.firstinspires.ftc.teamcode.Biobuzz.Sisteme.Shooter;
-import org.firstinspires.ftc.teamcode.Biobuzz.Sisteme.Turret;
-import org.firstinspires.ftc.teamcode.Biobuzz.Telemetry.RobotTelemetry;
+import org.firstinspires.ftc.teamcode.Biobuzz.Sisteme.Shooter.Shooter;
+import org.firstinspires.ftc.teamcode.Biobuzz.Sisteme.Turret.Turret;
 import org.firstinspires.ftc.teamcode.Biobuzz.Useful.Globals;
 import org.firstinspires.ftc.teamcode.Biobuzz.Useful.TeleOp_Methods;
 import org.firstinspires.ftc.teamcode.pedro.Constants;
