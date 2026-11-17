@@ -11,7 +11,6 @@ import org.firstinspires.ftc.teamcode.Biobuzz.Useful.Globals;
 
 import dev.frozenmilk.dairy.cachinghardware.CachingServo;
 
-
 ///de adaugat compesare de rotatie pt turela
 @Configurable
 public class Turret {
@@ -27,10 +26,7 @@ public class Turret {
     public static double MAX_AIM_SHIFT = 8.0;
 
     public static double approachDeg, aimShift, aimX, aimY;
-
-
     public CachingServo servo_left, servo_right;
-    public static double X_OFFSET_GAIN = 0.0, MAX_X_OFFSET = 0.0;
 
 
     public Turret(HardwareMap hardwareMap){
@@ -44,8 +40,29 @@ public class Turret {
         shooterWorldY = y + (shooterOffset * Math.sin(heading));
 
 
-        Globals.getGoal(y);
+        if(Globals.alliance == Globals.Alliance.RED){
+            if (y >70.7) {///sup
+                goalX = Globals.X_GOAL_RED_SUP;
+                goalY = Globals.Y_GOAL_RED_SUP;
+            }
+            else{///inf
+                goalX = Globals.X_GOAL_RED_INF;
+                goalY = Globals.Y_GOAL_RED_INF;
+            }
+        }
+
+        else {
+            if (y >70.7) {///sup
+                goalX = Globals.X_GOAL_BLUE_SUP;
+                goalY = Globals.Y_GOAL_BLUE_SUP;
+            }
+            else{///inf
+                goalX = Globals.X_GOAL_BLUE_INF;
+                goalY = Globals.Y_GOAL_BLUE_INF;
+            }
+        }
         aimPointOffset(shooterWorldX, shooterWorldY);
+
 
         target_angle = Math.atan2(goalY - shooterWorldY, goalX - shooterWorldX);
         target_angle = AngleUnit.normalizeRadians(target_angle);
@@ -73,7 +90,29 @@ public class Turret {
         shooterWorldY = predY + (shooterOffset * Math.sin(heading));
 
 
-        Globals.getGoal(y);
+        if(Globals.alliance == Globals.Alliance.RED){
+            if (y >70.7) {///sup
+                goalX = Globals.X_GOAL_RED_SUP;
+                goalY = Globals.Y_GOAL_RED_SUP;
+            }
+            else{///inf
+                goalX = Globals.X_GOAL_RED_INF;
+                goalY = Globals.Y_GOAL_RED_INF;
+            }
+        }
+
+        else {
+            if (y >70.7) {///sup
+                goalX = Globals.X_GOAL_BLUE_SUP;
+                goalY = Globals.Y_GOAL_BLUE_SUP;
+            }
+            else{///inf
+                goalX = Globals.X_GOAL_BLUE_INF;
+                goalY = Globals.Y_GOAL_BLUE_INF;
+            }
+        }
+
+
         aimPointOffset(shooterWorldX, shooterWorldY);
 
         target_angle = Math.atan2(goalY - shooterWorldY, goalX - shooterWorldX);

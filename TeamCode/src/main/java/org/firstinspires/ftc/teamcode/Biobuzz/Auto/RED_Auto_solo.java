@@ -5,7 +5,6 @@ import com.pedropathing.api.Paths;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.math.Pose;
 import com.pedropathing.paths.Path;
-import com.pedropathing.paths.interpolator.Interpolator;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -22,17 +21,23 @@ import org.firstinspires.ftc.teamcode.pedro.Constants;
 
 public class RED_Auto_solo extends LinearOpMode {
 
-    private final Pose startPose = new Pose(8.5, 24.5, Math.toRadians(270));
-    private final Pose collectgarden = new Pose(8.5, 9.5, Math.toRadians(272));
-    private final Pose shootgardenStart = new Pose(8, 8, Math.toRadians(0));
-    private final Pose shootgarden = new Pose(48, 118, Math.toRadians(0));
+    private final Pose startPose = new Pose(38, 8.5, Math.toRadians(180));
+    private final Pose collectgarden = new Pose(6.5, 8, Math.toRadians(181));
+    private final Pose shootgarden = new Pose(48, 118, Math.toRadians(-124));
     private final Pose shootgardenControl1 = new Pose(29, 90, Math.toRadians(0));
     private final Pose collectflowerStart = new Pose(48, 118, Math.toRadians(90));
-    private final Pose collectflower = new Pose(48, 130, Math.toRadians(90));
-    private final Pose shootflowerStart = new Pose(47, 130, Math.toRadians(90));
+    private final Pose collectflower = new Pose(49, 130, Math.toRadians(90));
+    private final Pose shootflowerStart = new Pose(49, 130, Math.toRadians(90));
     private final Pose shootflower = new Pose(52, 121, Math.toRadians(90));
-    private final Pose parkStart = new Pose(47, 130, Math.toRadians(90));
-    private final Pose park = new Pose(12.6969, 108.8613, Math.toRadians(90));
+    private final Pose collectflower2p1 = new Pose(23, 46, Math.toRadians(83.6598));
+    private final Pose collectflower2p1Control1 = new Pose(28, 91, Math.toRadians(0));
+    private final Pose collectflower2p2Start = new Pose(23, 46, Math.toRadians(180));
+    private final Pose collectflower2p2 = new Pose(12, 50, Math.toRadians(180));
+    private final Pose shootflower2Start = new Pose(12, 50, Math.toRadians(180));
+    private final Pose shootflower2 = new Pose(54, 118, Math.toRadians(180));
+    private final Pose shootflower2Control1 = new Pose(33.3793, 43.937, Math.toRadians(0));
+    private final Pose shootflower2Control2 = new Pose(22, 115, Math.toRadians(0));
+    private final Pose park = new Pose(6, 118, Math.toRadians(180));
 
     public Follower follower;
     public ElapsedTime pathTimer;
@@ -55,10 +60,10 @@ public class RED_Auto_solo extends LinearOpMode {
         follower.setPose(startPose);
         follower.update();
 
-        Shooter.rpmOffset = -40;
         turret.update_turret(startPose.x(), startPose.y(), startPose.heading());
-
         intakeTransfer.RampaSus();
+        Turret.centerOffset = 0;
+
         waitForStart();
         pathTimer.reset();
 
@@ -85,21 +90,37 @@ public class RED_Auto_solo extends LinearOpMode {
 
     }
 
+
     public Path collectgarden() {
         return Paths.line(startPose, collectgarden).linear(startPose, collectgarden);
     }
 
     public Path shootgarden() {
-        return Paths.curve(shootgardenStart, shootgardenControl1, shootgarden).reverseTangent();
+        return Paths.curve(collectgarden, shootgardenControl1, shootgarden).reverseTangent();
     }
+
     public Path collectflower() {
         return Paths.line(collectflowerStart, collectflower).linear(collectflowerStart, collectflower);
     }
+
     public Path shootflower() {
         return Paths.line(shootflowerStart, shootflower).linear(shootflowerStart, shootflower);
     }
+
+    public Path collectflower2p1() {
+        return Paths.curve(shootflower, collectflower2p1Control1, collectflower2p1).reverseTangent();
+    }
+
+    public Path collectflower2p2() {
+        return Paths.line(collectflower2p2Start, collectflower2p2).linear(collectflower2p2Start, collectflower2p2);
+    }
+
+    public Path shootflower2() {
+        return Paths.curve(shootflower2Start, shootflower2Control1, shootflower2Control2, shootflower2).linear(shootflower2Start, shootflower2);
+    }
+
     public Path park() {
-        return Paths.line(parkStart, park).reverseTangent();
+        return Paths.line(shootflower2, park).tangent();
     }
 
 
@@ -181,6 +202,39 @@ public class RED_Auto_solo extends LinearOpMode {
                 break;
 
             case 5:
+                if (shooter.state != Shooter.State.SHOOTING){
+                    follower.follow(collectflower2p1());
+                    setPathState(6);
+                }
+                break;
+
+                case 6:
+                if (!follower.following()){
+                    intakeTransfer.RampaJos();
+                    intakeTransfer.Collect();
+                    follower.follow(collectflower2p2());
+                    setPathState(7);
+                }
+                break;
+
+            case 7:
+                if ((!follower.following() && pathTimer.milliseconds() > 2000) || pathTimer.milliseconds() > 2100){
+                    follower.follow(shootflower2());
+                    setPathState(8);
+                }
+                break;
+
+            case 8:
+                if (!follower.following()){
+                    intakeTransfer.RampaSus();
+                    intakeTransfer.Shoot();
+                    shooter.state = Shooter.State.SHOOTING;
+                    setPathState(9);
+                }
+                break;
+
+
+            case 9:
                 if (shooter.state != Shooter.State.SHOOTING){
                     follower.follow(park());
                     intakeTransfer.RampaSus();

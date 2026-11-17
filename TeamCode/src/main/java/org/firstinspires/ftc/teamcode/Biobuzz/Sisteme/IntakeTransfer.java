@@ -16,8 +16,8 @@ public class IntakeTransfer {
     public static CachingDcMotorEx motorIntake, motorTransfer;
     public CachingServo rampaLeft;
 
-    public static double rampaJos = 0.07;
-    public static double rampaSus = 0.95;
+    public static double rampaSus = 0.1;
+    public static double rampaJos = 0.98;
     public boolean flower = false;
 
 

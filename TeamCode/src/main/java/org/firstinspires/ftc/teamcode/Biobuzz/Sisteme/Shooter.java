@@ -24,7 +24,6 @@ public class Shooter {
     public VoltageSensor shooter_voltage;
     public static double TARGET_VELOCITY, HOOD_ANGLE, gateOpen = 0.8, gateClosed = 0.54;
     public static double kP = 0.005 , kV = 0.00036, kS = 0.12, nominalVoltage = 12.0 , error, SHOOT_TIME = 800;
-
     public static double FAILSAFE_VELOCITY = 1420.0, FAILSAFE_ANGLE = 0.8  , TARGET_STOPPED = 0.0;
     public boolean running = false, shooting = false;
     public static double goalX, goalY;
@@ -73,7 +72,27 @@ public class Shooter {
         double vel = motor_shooter.getVelocity();
 
 
-        Globals.getGoal(y);
+        if(Globals.alliance == Globals.Alliance.RED){
+            if (y >70.7) {///sup
+                goalX = Globals.X_GOAL_RED_SUP;
+                goalY = Globals.Y_GOAL_RED_SUP;
+            }
+            else{///inf
+                goalX = Globals.X_GOAL_RED_INF;
+                goalY = Globals.Y_GOAL_RED_INF;
+            }
+        }
+
+        else {
+            if (y >70.7) {///sup
+                goalX = Globals.X_GOAL_BLUE_SUP;
+                goalY = Globals.Y_GOAL_BLUE_SUP;
+            }
+            else{///inf
+                goalX = Globals.X_GOAL_BLUE_INF;
+                goalY = Globals.Y_GOAL_BLUE_INF;
+            }
+        }
 
         distance_from_goal = Math.hypot(goalX - x + Turret.aimShift, goalY - y);
 
@@ -161,7 +180,27 @@ public class Shooter {
         Globals.predY = predY;
 
 
-        Globals.getGoal(y);
+        if(Globals.alliance == Globals.Alliance.RED){
+            if (y >70.7) {///sup
+                goalX = Globals.X_GOAL_RED_SUP;
+                goalY = Globals.Y_GOAL_RED_SUP;
+            }
+            else{///inf
+                goalX = Globals.X_GOAL_RED_INF;
+                goalY = Globals.Y_GOAL_RED_INF;
+            }
+        }
+
+        else {
+            if (y >70.7) {///sup
+                goalX = Globals.X_GOAL_BLUE_SUP;
+                goalY = Globals.Y_GOAL_BLUE_SUP;
+            }
+            else{///inf
+                goalX = Globals.X_GOAL_BLUE_INF;
+                goalY = Globals.Y_GOAL_BLUE_INF;
+            }
+        }
 
 
         distance_from_goal = Math.hypot(goalX - predX + Turret.aimShift, goalY - predY);
