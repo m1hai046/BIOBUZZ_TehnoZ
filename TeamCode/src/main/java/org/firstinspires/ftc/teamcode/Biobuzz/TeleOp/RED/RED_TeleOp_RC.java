@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Biobuzz.TeleOp.Disabled;
+package org.firstinspires.ftc.teamcode.Biobuzz.TeleOp.RED;
 
 
 import com.bylazar.configurables.annotations.Configurable;
@@ -6,7 +6,6 @@ import com.pedropathing.follower.Follower;
 import com.pedropathing.math.Pose;
 import com.pedropathing.math.Velocity;
 import com.qualcomm.hardware.lynx.LynxModule;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -16,16 +15,16 @@ import org.firstinspires.ftc.teamcode.Biobuzz.Sisteme.Drive;
 import org.firstinspires.ftc.teamcode.Biobuzz.Sisteme.IntakeTransfer;
 import org.firstinspires.ftc.teamcode.Biobuzz.Sisteme.Shooter;
 import org.firstinspires.ftc.teamcode.Biobuzz.Sisteme.Turret;
+import org.firstinspires.ftc.teamcode.Biobuzz.Telemetry.RobotTelemetry;
 import org.firstinspires.ftc.teamcode.Biobuzz.Useful.Globals;
 import org.firstinspires.ftc.teamcode.Biobuzz.Useful.TeleOp_Methods;
 import org.firstinspires.ftc.teamcode.pedro.Constants;
 
 import java.util.List;
 
-@Disabled
 @Configurable
-@TeleOp (name = "BLUE_TeleOp_RC", group = "TeleOp")
-public class BLUE_TeleOp_RC extends LinearOpMode {
+@TeleOp (name = "RED_TeleOp_RC", group = "TeleOp")
+public class RED_TeleOp_RC extends LinearOpMode {
     public IntakeTransfer intakeTransfer;
     public Turret turret;
     public Shooter shooter;
@@ -35,7 +34,7 @@ public class BLUE_TeleOp_RC extends LinearOpMode {
     public Follower follower;
     public TeleOp_Methods teleOp_Methods;
 
-    public static Pose startingPose = new Pose(132.5, 9, Math.toRadians(90));///de vazut
+    public static Pose startingPose = new Pose(9, 9, Math.toRadians(90));
 
 
     public List<LynxModule> allHubs;
@@ -43,7 +42,7 @@ public class BLUE_TeleOp_RC extends LinearOpMode {
     @Override
     public void runOpMode(){
 
-        Globals.alliance = Globals.Alliance.BLUE;
+        Globals.alliance = Globals.Alliance.RED;
         Globals.faze = Globals.FAZE.TELEOP;
 
         allHubs = hardwareMap.getAll(LynxModule.class);
@@ -52,7 +51,6 @@ public class BLUE_TeleOp_RC extends LinearOpMode {
         }
 
         telemetry.setMsTransmissionInterval(11);
-
 
         intakeTransfer = new IntakeTransfer(hardwareMap);
         turret = new Turret(hardwareMap);
@@ -101,18 +99,16 @@ public class BLUE_TeleOp_RC extends LinearOpMode {
             Pose currentPose = follower.pose();
             Velocity velocity = follower.velocity(); // Field-centric velocity
 
-            shooter.update_shooter(
-                    currentPose.x(),
-                    currentPose.y()
-            );
-
             turret.update_turret(
                     currentPose.x(),
                     currentPose.y(),
                     currentPose.heading()
             );
 
-
+            shooter.update_shooter(
+                    currentPose.x(),
+                    currentPose.y()
+            );
 
             teleOp_Methods.handleControls(currentG1, previousG1, currentG2, previousG2);
             drive.pedro_RC(follower, gamepad1);

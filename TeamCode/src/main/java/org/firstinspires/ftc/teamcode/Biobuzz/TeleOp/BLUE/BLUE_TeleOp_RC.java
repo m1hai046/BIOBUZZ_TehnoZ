@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Biobuzz.TeleOp;
+package org.firstinspires.ftc.teamcode.Biobuzz.TeleOp.BLUE;
 
 
 import com.bylazar.configurables.annotations.Configurable;
@@ -15,6 +15,7 @@ import org.firstinspires.ftc.teamcode.Biobuzz.Sisteme.Drive;
 import org.firstinspires.ftc.teamcode.Biobuzz.Sisteme.IntakeTransfer;
 import org.firstinspires.ftc.teamcode.Biobuzz.Sisteme.Shooter;
 import org.firstinspires.ftc.teamcode.Biobuzz.Sisteme.Turret;
+import org.firstinspires.ftc.teamcode.Biobuzz.Telemetry.RobotTelemetry;
 import org.firstinspires.ftc.teamcode.Biobuzz.Useful.Globals;
 import org.firstinspires.ftc.teamcode.Biobuzz.Useful.TeleOp_Methods;
 import org.firstinspires.ftc.teamcode.pedro.Constants;
@@ -22,8 +23,8 @@ import org.firstinspires.ftc.teamcode.pedro.Constants;
 import java.util.List;
 
 @Configurable
-@TeleOp (name = "RED_TeleOp_RC", group = "TeleOp")
-public class RED_TeleOp_RC extends LinearOpMode {
+@TeleOp (name = "BLUE_TeleOp_RC", group = "TeleOp")
+public class BLUE_TeleOp_RC extends LinearOpMode {
     public IntakeTransfer intakeTransfer;
     public Turret turret;
     public Shooter shooter;
@@ -33,15 +34,14 @@ public class RED_TeleOp_RC extends LinearOpMode {
     public Follower follower;
     public TeleOp_Methods teleOp_Methods;
 
-    public static Pose startingPose = new Pose(9, 9, Math.toRadians(90));///de vazut
-
+    public static Pose startingPose = new Pose(132.5, 9, Math.toRadians(90));
 
     public List<LynxModule> allHubs;
 
     @Override
     public void runOpMode(){
 
-        Globals.alliance = Globals.Alliance.RED;
+        Globals.alliance = Globals.Alliance.BLUE;
         Globals.faze = Globals.FAZE.TELEOP;
 
         allHubs = hardwareMap.getAll(LynxModule.class);
@@ -65,6 +65,7 @@ public class RED_TeleOp_RC extends LinearOpMode {
         follower.update();
         teleOp_Methods = new TeleOp_Methods(intakeTransfer, shooter, follower, startingPose);
         teleOp_Methods.robotState = TeleOp_Methods.RobotState.DEFAULT;
+
 
         Gamepad currentG1 = new Gamepad();
         Gamepad previousG1 = new Gamepad();
@@ -98,15 +99,15 @@ public class RED_TeleOp_RC extends LinearOpMode {
             Pose currentPose = follower.pose();
             Velocity velocity = follower.velocity(); // Field-centric velocity
 
-            shooter.update_shooter(
-                    currentPose.x(),
-                    currentPose.y()
-            );
-
             turret.update_turret(
                     currentPose.x(),
                     currentPose.y(),
                     currentPose.heading()
+            );
+
+            shooter.update_shooter(
+                    currentPose.x(),
+                    currentPose.y()
             );
 
 

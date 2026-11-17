@@ -9,8 +9,7 @@ public class Globals {
 
     ///poz goal aprox, de tunat
     public static double X_GOAL_RED_SUP = 62, Y_GOAL_RED_SUP = 92, X_GOAL_RED_INF = 60, Y_GOAL_RED_INF = 52;
-    public static double X_GOAL_BLUE_SUP = 84, Y_GOAL_BLUE_SUP = 82, X_GOAL_BLUE_INF = 84, Y_GOAL_BLUE_INF = 58;
-
+    public static double X_GOAL_BLUE_SUP = 87.5, Y_GOAL_BLUE_SUP = 92, X_GOAL_BLUE_INF = 85.5, Y_GOAL_BLUE_INF = 52;
     public static double predX, predY;
     public static double deadZone = 0.0, look_ahead_time = 0.0;/// de tunat pt sotm turela si shooter
 

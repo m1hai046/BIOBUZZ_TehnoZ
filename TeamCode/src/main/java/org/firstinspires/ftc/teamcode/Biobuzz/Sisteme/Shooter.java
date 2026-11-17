@@ -14,10 +14,6 @@ import org.firstinspires.ftc.teamcode.Biobuzz.Useful.Globals;
 import dev.frozenmilk.dairy.cachinghardware.CachingDcMotorEx;
 import dev.frozenmilk.dairy.cachinghardware.CachingServo;
 
-/// notes
-/// trb testat offset l ala de unghi, ca eu sunt desyul de sigur ca nu trb doar pe axa X dar si pe Y
-///
-
 @Configurable
 public class Shooter {
 
@@ -55,6 +51,7 @@ public class Shooter {
 
         state = State.RUNNING;
         TARGET_VELOCITY = TARGET_STOPPED;
+        rpmOffset = 0;
         gate.setPosition(gateClosed);
         shooter_voltage = hardwareMap.voltageSensor.iterator().next();
 
@@ -140,7 +137,7 @@ public class Shooter {
                 running = true;
                 if (Math.abs(error) <= 100) {
                     gateOpen();
-                    if (shootTimer.milliseconds() > 800) {
+                    if (shootTimer.milliseconds() > SHOOT_TIME) {
                         state = State.RUNNING;
                     }
                 }

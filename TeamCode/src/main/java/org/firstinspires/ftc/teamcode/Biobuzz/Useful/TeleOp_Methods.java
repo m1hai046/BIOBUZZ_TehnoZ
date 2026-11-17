@@ -19,8 +19,6 @@ public class TeleOp_Methods {
     public RobotState robotState;
     private static final double trigger_threshold = 0.3;
     final TelemetryManager telemetryM;
-    //VoltageSensor voltageSensor;
-
     public IntakeTransfer M_intakeTransfer;
     public Shooter M_shooter;
     public Follower M_follower;
@@ -34,7 +32,6 @@ public class TeleOp_Methods {
         M_follower = follower;
         M_startingPose = startingPose;
         telemetryM = PanelsTelemetry.INSTANCE.getTelemetry();
-        //voltageSensor =
     }
 
     public void handleControls(Gamepad current, Gamepad previous, Gamepad current2, Gamepad previous2){
@@ -126,11 +123,6 @@ public class TeleOp_Methods {
     }
 
 
-    ///folosita la shooter si turela
-
-
-
-
     public void update_telemetry(Telemetry telemetry, ElapsedTime loops){
         telemetry.addLine("-------- ROBOT STATE --------");
         telemetry.addData(" State", robotState.name());
@@ -144,8 +136,6 @@ public class TeleOp_Methods {
         telemetry.addData(" goalY", Shooter.goalY);
         telemetry.addData(" voltaj_shooter", M_shooter.shooter_voltage.getVoltage());
 
-//        telemetry.addData(" gate pos", Shooter.);
-
 
         if (robotState == TeleOp_Methods.RobotState.SHOOT)
             telemetry.addData("  Shoot timer", "%.0f / %.0f ms",
@@ -156,7 +146,6 @@ public class TeleOp_Methods {
         telemetry.addData(" Rate", "%.1f°/s", Turret.target_angle);
         telemetry.addData(" goalX", Turret.goalX);
         telemetry.addData(" goalY", Turret.goalY);
-
 
 
         telemetry.addLine("-------- INTAKE/TRANSFER --------");
@@ -178,16 +167,11 @@ public class TeleOp_Methods {
 
         telemetry.addData("distance from goal ", M_shooter.distance_from_goal);
 
-        //double batteryVoltage = voltageSensor.getVoltage();
-
         telemetry.addLine("-------- PROFILING --------");
         telemetry.addData("loop time ", loops.milliseconds());
-        //telemetry.addData("batteryVoltage ", batteryVoltage);
-
 
                 telemetryM.debug("--- Shooter ---");
         telemetryM.addData("motor1RPM",      M_shooter.motor_shooter.getVelocity());
-        //telemetryM.addData("RPM",            Shooter.getRpm(M_shooter.motor_shooter.getVelocity()));
         telemetryM.addData("targetVelocity", Shooter.TARGET_VELOCITY);
         telemetryM.addData("Velocity",       M_shooter.motor_shooter.getVelocity());
 
@@ -202,8 +186,4 @@ public class TeleOp_Methods {
         telemetryM.update(telemetry);
         telemetry.update();
     }
-
-
-
-
 }

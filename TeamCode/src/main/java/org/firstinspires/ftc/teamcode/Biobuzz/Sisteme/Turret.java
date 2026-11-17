@@ -22,7 +22,7 @@ public class Turret {
     public static double offset = 0.0, centerOffset = -6.0;
 
     public static double GOAL_DEPTH = 12.04;
-    public static double AIM_SHIFT_GAIN = 1.0;
+    public static double SHOOTER_AIM_GAIN = 1.0, TURRET_AIM_FRACTION = 0.5;;
     public static double MAX_AIM_SHIFT = 8.0;
 
     public static double approachDeg, aimShift, aimX, aimY;
@@ -32,6 +32,7 @@ public class Turret {
     public Turret(HardwareMap hardwareMap){
         servo_left = new CachingServo(hardwareMap.get(Servo.class, "Turela_left"));
         servo_right = new CachingServo(hardwareMap.get(Servo.class, "Turela_right"));
+        offset = 0;
     }
 
     public void update_turret(double x, double y, double heading){
@@ -64,7 +65,7 @@ public class Turret {
         aimPointOffset(shooterWorldX, shooterWorldY);
 
 
-        target_angle = Math.atan2(goalY - shooterWorldY, goalX - shooterWorldX);
+        target_angle = Math.atan2(aimY - shooterWorldY, aimX - shooterWorldX);
         target_angle = AngleUnit.normalizeRadians(target_angle);
         heading = AngleUnit.normalizeRadians(heading);
 
@@ -115,7 +116,7 @@ public class Turret {
 
         aimPointOffset(shooterWorldX, shooterWorldY);
 
-        target_angle = Math.atan2(goalY - shooterWorldY, goalX - shooterWorldX);
+        target_angle = Math.atan2(aimY - shooterWorldY, aimX - shooterWorldX);
         target_angle = AngleUnit.normalizeRadians(target_angle);
         heading = AngleUnit.normalizeRadians(heading);
 
@@ -143,10 +144,11 @@ public class Turret {
 
         approachDeg = Math.toDegrees(Math.atan2(lateral, forward));
 
-        aimShift = Utils.clamp(AIM_SHIFT_GAIN * (GOAL_DEPTH / 2.0) * lateral / forward,
+        aimShift = Utils.clamp(SHOOTER_AIM_GAIN * (GOAL_DEPTH / 2.0) * lateral / forward,
                 -MAX_AIM_SHIFT, MAX_AIM_SHIFT);
 
-        aimX = goalX + aimShift;
+        aimX = goalX + aimShift * TURRET_AIM_FRACTION;
+
         aimY = goalY;
     }
 

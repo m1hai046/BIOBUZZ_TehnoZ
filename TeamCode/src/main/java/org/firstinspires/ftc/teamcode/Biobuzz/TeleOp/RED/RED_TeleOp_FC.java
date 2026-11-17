@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Biobuzz.TeleOp;
+package org.firstinspires.ftc.teamcode.Biobuzz.TeleOp.RED;
 
 
 import com.bylazar.configurables.annotations.Configurable;
@@ -33,7 +33,7 @@ public class RED_TeleOp_FC extends LinearOpMode {
     public Follower follower;
     public TeleOp_Methods teleOp_Methods;
 
-    public static Pose startingPose = new Pose(9, 9, Math.toRadians(90));///de vazut
+    public static Pose startingPose = new Pose(9, 9, Math.toRadians(90));
 
 
     public List<LynxModule> allHubs;
@@ -98,15 +98,15 @@ public class RED_TeleOp_FC extends LinearOpMode {
             Pose currentPose = follower.pose();
             Velocity velocity = follower.velocity(); // Field-centric velocity
 
-            shooter.update_shooter(
-                    currentPose.x(),
-                    currentPose.y()
-            );
-
             turret.update_turret(
                     currentPose.x(),
                     currentPose.y(),
                     currentPose.heading()
+            );
+
+            shooter.update_shooter(
+                    currentPose.x(),
+                    currentPose.y()
             );
 
 
