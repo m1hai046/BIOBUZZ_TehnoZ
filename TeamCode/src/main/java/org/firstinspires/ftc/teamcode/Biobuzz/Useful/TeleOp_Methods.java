@@ -13,6 +13,7 @@ import org.firstinspires.ftc.teamcode.Biobuzz.Sisteme.IntakeTransfer;
 import org.firstinspires.ftc.teamcode.Biobuzz.Sisteme.Shooter.Shooter;
 import org.firstinspires.ftc.teamcode.Biobuzz.Sisteme.Shooter.Shooter_Constants;
 import org.firstinspires.ftc.teamcode.Biobuzz.Sisteme.Turret.Turret;
+import org.firstinspires.ftc.teamcode.Biobuzz.Sisteme.Turret.TurretConstants;
 
 
 @Configurable
@@ -70,7 +71,7 @@ public class TeleOp_Methods {
 
         if (current.dpad_down && !previous.dpad_down) {
             M_follower.setPose(M_startingPose);
-            Turret.offset = 0;
+            TurretConstants.offset = 0;
             Shooter.rpmOffset = 0;
         }
 
@@ -78,9 +79,9 @@ public class TeleOp_Methods {
         if (current2.a && !previous2.a) Shooter.rpmOffset -= 20;
 
         if (current2.right_bumper && !previous2.right_bumper)
-            Turret.offset -= 1;
+            TurretConstants.offset -= 1;
         if (current2.left_bumper && !previous2.left_bumper) {
-            Turret.offset += 1;
+            TurretConstants.offset += 1;
         }
 
     }

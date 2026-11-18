@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.Biobuzz.Sisteme.Shooter.Shooter_Constants;
 import org.firstinspires.ftc.teamcode.Biobuzz.Useful.Globals;
 
 import dev.frozenmilk.dairy.cachinghardware.CachingServo;
@@ -15,7 +16,7 @@ public class Turret {
     public static double target_angle, relative_angle, target_position;
     public static double goalX, goalY;
     public static double shooterWorldX, shooterWorldY;
-    public static double offset = 0.0;
+
 
 
     public static double approachDeg, aimShift, aimX, aimY;
@@ -25,7 +26,7 @@ public class Turret {
     public Turret(HardwareMap hardwareMap){
         servo_left = new CachingServo(hardwareMap.get(Servo.class, "Turela_left"));
         servo_right = new CachingServo(hardwareMap.get(Servo.class, "Turela_right"));
-        offset = 0;
+        TurretConstants.offset = 0;
     }
 
     public void update_turret(double x, double y, double heading){
@@ -38,10 +39,12 @@ public class Turret {
             if (y >70.7) {///sup
                 goalX = Globals.X_GOAL_RED_SUP;
                 goalY = Globals.Y_GOAL_RED_SUP;
+                TurretConstants.cOffset = -TurretConstants.centerOffset;
             }
             else{///inf
                 goalX = Globals.X_GOAL_RED_INF;
                 goalY = Globals.Y_GOAL_RED_INF;
+                TurretConstants.cOffset = TurretConstants.centerOffset;
             }
         }
 
@@ -49,10 +52,12 @@ public class Turret {
             if (y >70.7) {///sup
                 goalX = Globals.X_GOAL_BLUE_SUP;
                 goalY = Globals.Y_GOAL_BLUE_SUP;
+                TurretConstants.centerOffset = -TurretConstants.centerOffset;
             }
             else{///inf
                 goalX = Globals.X_GOAL_BLUE_INF;
                 goalY = Globals.Y_GOAL_BLUE_INF;
+                TurretConstants.cOffset = TurretConstants.centerOffset;
             }
         }
         aimPointOffset(shooterWorldX, shooterWorldY);
@@ -63,7 +68,7 @@ public class Turret {
         heading = AngleUnit.normalizeRadians(heading);
 
         relative_angle = Math.toDegrees(target_angle - heading);
-        relative_angle = AngleUnit.normalizeDegrees(relative_angle) + offset + TurretConstants.centerOffset;
+        relative_angle = AngleUnit.normalizeDegrees(relative_angle) + TurretConstants.offset + TurretConstants.cOffset;
         relative_angle = Math.max(TurretConstants.MIN_ANGLE, Math.min(TurretConstants.MAX_ANGLE, relative_angle));
         target_position = Range.scale(relative_angle, TurretConstants.MIN_ANGLE, TurretConstants.MAX_ANGLE, TurretConstants.MIN_POS, TurretConstants.MAX_POS);
 
@@ -113,7 +118,7 @@ public class Turret {
         target_angle = AngleUnit.normalizeRadians(target_angle);
         heading = AngleUnit.normalizeRadians(heading);
 
-        relative_angle = Math.toDegrees(AngleUnit.normalizeRadians(target_angle - heading)) + offset + TurretConstants.centerOffset;
+        relative_angle = Math.toDegrees(AngleUnit.normalizeRadians(target_angle - heading)) + TurretConstants.offset + TurretConstants.centerOffset;
 //        relative_angle = AngleUnit.normalizeDegrees(relative_angle + 180);   //pt turela pe invers
         ///am comentat o ca nu mai avem turela la spate
         relative_angle = Math.max(TurretConstants.MIN_ANGLE, Math.min(TurretConstants.MAX_ANGLE, relative_angle));
