@@ -54,8 +54,7 @@ public class Paths_Auto_Solo {
     public static void buildPoses() {
         PoseFactory poseFactory = PoseFactory.degrees();
         if (Globals.alliance == Globals.Alliance.BLUE) {
-            poseFactory = poseFactory.mirrorX(70.5);
-            poseFactory = poseFactory.mirrorY(70.5);
+            poseFactory = poseFactory.mirrorAroundPoint(70.5, 70.5);
         }
 
         startPose = poseFactory.of(38, 8.5, 180);

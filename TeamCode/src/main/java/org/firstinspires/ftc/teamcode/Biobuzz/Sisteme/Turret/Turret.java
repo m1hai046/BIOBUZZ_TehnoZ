@@ -52,7 +52,7 @@ public class Turret {
             if (y >70.7) {///sup
                 goalX = Globals.X_GOAL_BLUE_SUP;
                 goalY = Globals.Y_GOAL_BLUE_SUP;
-                TurretConstants.centerOffset = -TurretConstants.centerOffset;
+                TurretConstants.cOffset = -TurretConstants.centerOffset;
             }
             else{///inf
                 goalX = Globals.X_GOAL_BLUE_INF;
