@@ -12,6 +12,7 @@ import org.firstinspires.ftc.teamcode.Biobuzz.Sisteme.Shooter.Shooter;
 import org.firstinspires.ftc.teamcode.Biobuzz.Sisteme.Turret.Turret;
 import org.firstinspires.ftc.teamcode.Biobuzz.Sisteme.Turret.TurretConstants;
 import org.firstinspires.ftc.teamcode.Biobuzz.Useful.Globals;
+import org.firstinspires.ftc.teamcode.pedro.Constants;
 
 public class Paths_Auto_Solo {
 
@@ -83,7 +84,7 @@ public class Paths_Auto_Solo {
     }
 
     public static Path shootgarden() {
-        return Paths.curve(collectgarden, shootgardenControl1, shootgarden).reverseTangent();
+        return Paths.curve(collectgarden, shootgardenControl1, shootgarden).reverseTangent().with(Constants.foresightConfig.maxPathSpeed.at(0.9));
     }
 
     public static Path collectflower() {
