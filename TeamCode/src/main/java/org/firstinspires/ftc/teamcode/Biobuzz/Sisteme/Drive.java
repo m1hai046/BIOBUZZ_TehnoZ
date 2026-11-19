@@ -7,6 +7,8 @@ import com.pedropathing.follower.Follower;
 import com.pedropathing.follower.ManualDrive;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
+import org.firstinspires.ftc.teamcode.Biobuzz.Useful.Globals;
+
 
 @Configurable
 public class Drive {
@@ -19,11 +21,15 @@ public class Drive {
     }
 
     public void pedro_FC(Follower follower, Gamepad gamepad1) {
+        double heading = follower.pose().heading();
+        if (Globals.alliance == Globals.Alliance.BLUE) {
+            heading += Math.PI;
+        }
         DrivePowers powers = ManualDrive.fieldCentric(
                 -gamepad1.left_stick_y,
                 -gamepad1.left_stick_x,
                 -gamepad1.right_stick_x,
-                follower.pose().heading());
+                heading);
 
         follower.manual(powers);
     }

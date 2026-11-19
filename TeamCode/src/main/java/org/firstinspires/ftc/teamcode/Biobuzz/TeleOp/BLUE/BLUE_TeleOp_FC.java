@@ -16,13 +16,14 @@ import org.firstinspires.ftc.teamcode.Biobuzz.Sisteme.IntakeTransfer;
 import org.firstinspires.ftc.teamcode.Biobuzz.Sisteme.Shooter.Shooter;
 import org.firstinspires.ftc.teamcode.Biobuzz.Sisteme.Turret.Turret;
 import org.firstinspires.ftc.teamcode.Biobuzz.Useful.Globals;
+import org.firstinspires.ftc.teamcode.Biobuzz.Useful.Pose_Storage;
 import org.firstinspires.ftc.teamcode.Biobuzz.Useful.TeleOp_Methods;
 import org.firstinspires.ftc.teamcode.pedro.Constants;
 
 import java.util.List;
 
 @Configurable
-@TeleOp (name = "BLUE_TeleOp_FC", group = "TeleOp")
+@TeleOp (name = "BLUE_TeleOp_FC", group = "FC")
 public class BLUE_TeleOp_FC extends LinearOpMode {
     public IntakeTransfer intakeTransfer;
     public Turret turret;
@@ -32,8 +33,7 @@ public class BLUE_TeleOp_FC extends LinearOpMode {
     public ElapsedTime loops = new ElapsedTime();
     public Follower follower;
     public TeleOp_Methods teleOp_Methods;
-
-    public static Pose startingPose = new Pose(132.5, 9, Math.toRadians(90));
+    public static Pose resetPose = new Pose(132.5, 132.5, Math.toRadians(270));
 
     public List<LynxModule> allHubs;
 
@@ -60,9 +60,15 @@ public class BLUE_TeleOp_FC extends LinearOpMode {
 
         follower = Constants.create(hardwareMap);
 
+        Pose startingPose = new Pose(
+                Pose_Storage.lastX,
+                Pose_Storage.lastY,
+                Pose_Storage.lastHeading
+        );
+
         follower.setPose(startingPose);///de vazut
         follower.update();
-        teleOp_Methods = new TeleOp_Methods(intakeTransfer, shooter, follower, startingPose);
+        teleOp_Methods = new TeleOp_Methods(intakeTransfer, shooter, follower, resetPose);
         teleOp_Methods.robotState = TeleOp_Methods.RobotState.DEFAULT;
 
         Gamepad currentG1 = new Gamepad();

@@ -11,14 +11,14 @@ import org.firstinspires.ftc.teamcode.Biobuzz.Sisteme.IntakeTransfer;
 import org.firstinspires.ftc.teamcode.Biobuzz.Sisteme.Shooter.Shooter;
 import org.firstinspires.ftc.teamcode.Biobuzz.Sisteme.Turret.Turret;
 import org.firstinspires.ftc.teamcode.Biobuzz.Useful.Globals;
+import org.firstinspires.ftc.teamcode.Biobuzz.Useful.Pose_Storage;
 import org.firstinspires.ftc.teamcode.pedro.Constants;
 
 
 @Configurable
-@Autonomous(name="BLUE_A2_Solo", group="Auto")
+@Autonomous(name="BLUE_A2_Solo", group="Solo")
 
 public class BLUE_A2_Solo extends LinearOpMode {
-
 
     public Follower follower;
     public ElapsedTime pathTimer;
@@ -67,6 +67,9 @@ public class BLUE_A2_Solo extends LinearOpMode {
             );
             Paths_Auto_Solo.autonomousPathUpdate();
 
+            Pose_Storage.lastX = currentPose.x();
+            Pose_Storage.lastY = currentPose.y();
+            Pose_Storage.lastHeading = currentPose.heading();
         }
     }
 }
