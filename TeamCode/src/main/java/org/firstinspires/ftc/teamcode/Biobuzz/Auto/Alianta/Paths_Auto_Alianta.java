@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Biobuzz.Sisteme.IntakeTransfer;
 import org.firstinspires.ftc.teamcode.Biobuzz.Sisteme.Shooter.Shooter;
+import org.firstinspires.ftc.teamcode.Biobuzz.Sisteme.Shooter.Shooter_Constants;
 import org.firstinspires.ftc.teamcode.Biobuzz.Sisteme.Turret.Turret;
 import org.firstinspires.ftc.teamcode.Biobuzz.Sisteme.Turret.TurretConstants;
 import org.firstinspires.ftc.teamcode.Biobuzz.Useful.Globals;
@@ -55,7 +56,7 @@ public class Paths_Auto_Alianta {
 
         startPose = poseFactory.of(38, 8.5, 180);
         collectgarden = poseFactory.of(6.5, 8, 181);
-        shootgarden = poseFactory.of(48, 118, 55.8403);
+        shootgarden = poseFactory.of(48, 120, 55.8403);
         shootgardenControl1 = poseFactory.of(29, 90, 0);
         collectflowerStart = poseFactory.of(48, 118, 90);
         collectflower = poseFactory.of(48, 130, 90);
@@ -133,7 +134,7 @@ public class Paths_Auto_Alianta {
                 if ( paths_shooter.state !=  Shooter.State.SHOOTING){
                      paths_intakeTransfer.Collect();
                      paths_follower.follow(collectgarden());
-                     Shooter.rpmOffset = - 40;
+                     Shooter.rpmOffset = - 30;
                     setPathState(2);
                 }
                 break;
@@ -192,6 +193,8 @@ public class Paths_Auto_Alianta {
                 if (! paths_follower.following()){
                      paths_intakeTransfer.Collect();
                      paths_follower.follow(collectflower2p2());
+                    TurretConstants.offset = -15;
+                    Shooter.rpmOffset = 0;
                     setPathState(7);
                 }
                 break;

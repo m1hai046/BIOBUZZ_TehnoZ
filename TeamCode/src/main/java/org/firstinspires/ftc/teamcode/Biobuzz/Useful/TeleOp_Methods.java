@@ -181,6 +181,14 @@ public class TeleOp_Methods {
         telemetryM.addData("graph.shooter.actual", M_shooter.motor_shooter.getVelocity());
         telemetryM.addData("graph.shooter.pwr1",   M_shooter.motor_shooter.getPower());
 
+        telemetryM.addData("poseX", M_follower.pose().x());
+        telemetryM.addData("poseY", M_follower.pose().y());
+        telemetryM.addData("poseHeading", M_follower.pose().heading());
+
+        telemetryM.addData("graph.poseX", M_follower.pose().x());
+        telemetryM.addData("graph.poseY", M_follower.pose().y());
+        telemetryM.addData("graph.poseHeading", M_follower.pose().heading());
+
         //telemetryM.addData("graph.battery",  batteryVoltage);
 
         //telemetryM.addData("batteryVoltage ", batteryVoltage);

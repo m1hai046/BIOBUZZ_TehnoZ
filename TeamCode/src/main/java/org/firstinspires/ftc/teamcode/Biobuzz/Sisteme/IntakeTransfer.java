@@ -45,7 +45,6 @@ public class IntakeTransfer {
 
         motorIntake.setDirection(CachingDcMotorEx.Direction.REVERSE);
         motorTransfer.setDirection(CachingDcMotorEx.Direction.FORWARD);
-        RampaJos();
     }
 
     public void Collect(){
