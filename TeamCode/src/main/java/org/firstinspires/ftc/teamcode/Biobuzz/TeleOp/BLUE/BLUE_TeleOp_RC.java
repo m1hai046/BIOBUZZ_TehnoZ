@@ -69,7 +69,6 @@ public class BLUE_TeleOp_RC extends LinearOpMode {
         follower.setPose(startingPose);///de vazut
         follower.update();
         teleOp_Methods = new TeleOp_Methods(intakeTransfer, shooter, follower, resetPose);
-        teleOp_Methods.robotState = TeleOp_Methods.RobotState.DEFAULT;
 
 
         Gamepad currentG1 = new Gamepad();
@@ -79,6 +78,8 @@ public class BLUE_TeleOp_RC extends LinearOpMode {
 
 
         waitForStart();
+
+        teleOp_Methods.robotState = TeleOp_Methods.RobotState.DEFAULT;
 
 
         List<LynxModule> allHubs = hardwareMap.getAll(LynxModule.class);
