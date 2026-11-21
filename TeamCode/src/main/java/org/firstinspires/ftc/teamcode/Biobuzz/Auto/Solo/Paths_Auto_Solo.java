@@ -31,7 +31,8 @@ public class Paths_Auto_Solo {
             shootflower2,
             shootflower2Control1,
             shootflower2Control2,
-            park;
+            park,
+    parkControl1;
 
     public static Follower paths_follower;
     public static ElapsedTime paths_pathTimer;
@@ -68,10 +69,9 @@ public class Paths_Auto_Solo {
         collectflower2p2Start = poseFactory.of(23, 46, 180);
         collectflower2p2 = poseFactory.of(11, 47, 180);
         shootflower2Start = poseFactory.of(11, 47, 180);
-        shootflower2 = poseFactory.of(54, 118, 180);
-        shootflower2Control1 = poseFactory.of(33.3793, 43.937, 0);
-        shootflower2Control2 = poseFactory.of(22, 115, 0);
-        park = poseFactory.of(11, 118, 180);
+        shootflower2 = poseFactory.of(41.528, 15.8433, 120);
+        park = poseFactory.of(6.5669, 96.2308, 101.8859);
+        parkControl1 = poseFactory.of(20.364, 30.6789, 0);
     }
 
     public static Path collectgarden() {
@@ -103,7 +103,7 @@ public class Paths_Auto_Solo {
     }
 
     public static Path park() {
-        return Paths.line(shootflower2, park).tangent().with(Constants.foresightConfig.maxPathSpeed.at(0.9));
+        return Paths.curve(shootflower2, parkControl1, park).tangent();
     }
 
     public static void setPathState(int n){
