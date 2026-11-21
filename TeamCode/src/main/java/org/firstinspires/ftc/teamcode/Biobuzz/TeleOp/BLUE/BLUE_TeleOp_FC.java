@@ -114,6 +114,10 @@ public class BLUE_TeleOp_FC extends LinearOpMode {
                     currentPose.y()
             );
 
+            if(teleOp_Methods.robotState == TeleOp_Methods.RobotState.INTAKE){
+                gamepad1.rumble(100);
+            }
+
             teleOp_Methods.handleControls(currentG1, previousG1, currentG2, previousG2);
             drive.pedro_FC(follower, gamepad1);
             teleOp_Methods.runStateMachine();

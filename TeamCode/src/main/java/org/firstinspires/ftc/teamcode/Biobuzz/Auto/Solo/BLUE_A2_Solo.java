@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Biobuzz.Auto;
+package org.firstinspires.ftc.teamcode.Biobuzz.Auto.Solo;
 
 import com.bylazar.configurables.annotations.Configurable;
 import com.pedropathing.follower.Follower;

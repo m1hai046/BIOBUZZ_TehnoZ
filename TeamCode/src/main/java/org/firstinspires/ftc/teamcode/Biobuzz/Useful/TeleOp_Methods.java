@@ -82,6 +82,7 @@ public class TeleOp_Methods {
             TurretConstants.offset -= 1;
         if (current2.left_bumper && !previous2.left_bumper) {
             TurretConstants.offset += 1;
+
         }
 
     }
